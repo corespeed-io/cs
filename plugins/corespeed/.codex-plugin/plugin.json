@@ -1,0 +1,46 @@
+{
+  "name": "corespeed",
+  "version": "0.2.0",
+  "description": "Connect Codex to CoreSpeed: your connected apps, shared memory, media, web and social tools through one MCP server, plus skills for the cs CLI and the HTTP API.",
+  "author": {
+    "name": "CoreSpeed",
+    "email": "contact@corespeed.io",
+    "url": "https://corespeed.io"
+  },
+  "homepage": "https://corespeed.io/docs",
+  "repository": "https://github.com/corespeed-io/cs",
+  "license": "Apache-2.0",
+  "keywords": [
+    "corespeed",
+    "mcp",
+    "memory",
+    "connectors",
+    "cli",
+    "agents"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "CoreSpeed",
+    "shortDescription": "Connected apps, memory and tools for agents",
+    "longDescription": "Connect Codex to CoreSpeed's MCP server with a browser sign-in: the tools of every app your organization has connected, long-term memory shared across agents, media generation and understanding, live web search and public social data, all on one wallet with spend caps and an audit trail. Bundled skills cover the cs CLI and calling CoreSpeed over HTTP from code and CI.",
+    "developerName": "CoreSpeed",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://corespeed.io",
+    "privacyPolicyURL": "https://corespeed.io/privacy",
+    "defaultPrompt": [
+      "Search my CoreSpeed memory for context relevant to this task.",
+      "Show my connected CoreSpeed tools and explain what I can do with them.",
+      "Set up this project's CI to call CoreSpeed with an API key."
+    ],
+    "brandColor": "#C2410C",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/logo.svg",
+    "termsOfServiceURL": "https://corespeed.io/terms"
+  }
+}

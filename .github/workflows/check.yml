@@ -1,0 +1,49 @@
+name: check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Manifests are valid JSON
+        run: |
+          for f in .agents/plugins/marketplace.json .claude-plugin/marketplace.json \
+            plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed/.claude-plugin/plugin.json \
+            plugins/corespeed/.mcp.json; do
+            jq empty "$f" || { echo "::error file=$f::invalid JSON"; exit 1; }
+          done
+      - name: The MCP server signs in with OAuth
+        # The plugin must never ask for an API key: the client discovers the
+        # authorization server from the /mcp challenge (RFC 9728), so the entry
+        # carries only the URL — no headers, no token env var, no oauth_resource.
+        run: |
+          jq -e '.mcpServers | length == 1 and (.corespeed | keys == ["type", "url"]) and .corespeed.url == "https://api.corespeed.io/mcp"' \
+            plugins/corespeed/.mcp.json > /dev/null \
+            || { echo "::error file=plugins/corespeed/.mcp.json::expected exactly {type, url} pointing at https://api.corespeed.io/mcp"; exit 1; }
+      - name: Both manifests carry the same version
+        run: |
+          codex=$(jq -r .version plugins/corespeed/.codex-plugin/plugin.json)
+          claude=$(jq -r .version plugins/corespeed/.claude-plugin/plugin.json)
+          [ "$codex" = "$claude" ] || { echo "::error::Codex manifest is $codex, Claude Code manifest is $claude"; exit 1; }
+
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: hashgraph-online/ai-plugin-scanner-action@e1d5945aadbd710ed6cc18f216a4916eb1bafde6 # v1.2.719
+        with:
+          plugin_dir: "."
+          min_score: 80
+          fail_on_severity: high

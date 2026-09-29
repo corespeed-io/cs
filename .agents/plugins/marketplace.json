@@ -1,0 +1,20 @@
+{
+  "name": "corespeed",
+  "interface": {
+    "displayName": "CoreSpeed"
+  },
+  "plugins": [
+    {
+      "name": "corespeed",
+      "source": {
+        "source": "local",
+        "path": "./plugins/corespeed"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

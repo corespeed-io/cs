@@ -1,0 +1,14 @@
+{
+  "name": "corespeed",
+  "version": "0.2.0",
+  "description": "Connect Claude Code to CoreSpeed: your connected apps, shared memory, media, web and social tools through one MCP server, plus skills for the cs CLI and the HTTP API.",
+  "author": {
+    "name": "CoreSpeed",
+    "email": "contact@corespeed.io",
+    "url": "https://corespeed.io"
+  },
+  "homepage": "https://corespeed.io/docs",
+  "repository": "https://github.com/corespeed-io/cs",
+  "license": "Apache-2.0",
+  "keywords": ["corespeed", "mcp", "memory", "connectors", "cli", "agents"]
+}

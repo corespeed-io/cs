@@ -1,0 +1,19 @@
+{
+  "name": "corespeed",
+  "owner": {
+    "name": "CoreSpeed",
+    "email": "contact@corespeed.io"
+  },
+  "metadata": {
+    "description": "CoreSpeed plugins for coding agents."
+  },
+  "plugins": [
+    {
+      "name": "corespeed",
+      "source": "./plugins/corespeed",
+      "description": "Your connected apps, shared memory, media, web and social tools through one MCP server, plus skills for the cs CLI and the HTTP API.",
+      "category": "development",
+      "homepage": "https://corespeed.io/docs"
+    }
+  ]
+}
