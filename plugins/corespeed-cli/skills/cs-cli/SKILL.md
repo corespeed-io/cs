@@ -61,10 +61,12 @@ cs mcp get memory__remember             # description, input schema, and a call 
 cs mcp call memory__remember '{"memory": "Staging deploys go through bart.", "scope": "shared"}'
 ```
 
-`cs mcp call` prints the tool's result on stdout: its `structuredContent` when
-it has one, otherwise its content, as pretty-printed JSON. `--raw` prints the
-whole `CallToolResult`. The exit code says what the tool did (table below), so
-check it before reading the output. `cs mcp list` prints every tool you can
+`cs mcp call` prints the tool's result on stdout: its `structuredContent` as
+JSON when it has one, otherwise its content blocks, text as text (JSON text
+re-indented) and anything else summarised. To parse the result as JSON in
+every case, pass `--raw`: it prints the whole `CallToolResult` as it arrived.
+The exit code says what the tool did (table below), so check it before
+reading the output. `cs mcp list` prints every tool you can
 call, one line each; `--json` prints their definitions.
 
 Tool names are `<prefix>__<tool>`: `memory__*` is shared memory, `manage__*`
