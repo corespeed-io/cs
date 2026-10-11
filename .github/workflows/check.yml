@@ -19,7 +19,7 @@ jobs:
         run: |
           for f in .agents/plugins/marketplace.json .claude-plugin/marketplace.json \
             plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed/.claude-plugin/plugin.json \
-            plugins/corespeed/.mcp.json; do
+            plugins/corespeed/.mcp.json plugins/corespeed-cli/.codex-plugin/plugin.json; do
             jq empty "$f" || { echo "::error file=$f::invalid JSON"; exit 1; }
           done
       - name: The MCP server signs in with OAuth
@@ -30,6 +30,17 @@ jobs:
           jq -e '.mcpServers | length == 1 and (.corespeed | keys == ["type", "url"]) and .corespeed.url == "https://api.corespeed.io/mcp"' \
             plugins/corespeed/.mcp.json > /dev/null \
             || { echo "::error file=plugins/corespeed/.mcp.json::expected exactly {type, url} pointing at https://api.corespeed.io/mcp"; exit 1; }
+      - name: The CLI plugin is skills-only and bundles the same cs-cli skill
+        # corespeed-cli registers no MCP server: that is the point of it (a
+        # client loads no tool list). Its cs-cli skill is a copy of the MCP
+        # plugin's, which is the source; a drift here is a stale copy.
+        run: |
+          test ! -e plugins/corespeed-cli/.mcp.json \
+            || { echo "::error::plugins/corespeed-cli must not carry .mcp.json"; exit 1; }
+          jq -e 'has("mcpServers") | not' plugins/corespeed-cli/.codex-plugin/plugin.json > /dev/null \
+            || { echo "::error file=plugins/corespeed-cli/.codex-plugin/plugin.json::skills-only plugin: no mcpServers"; exit 1; }
+          cmp -s plugins/corespeed/skills/cs-cli/SKILL.md plugins/corespeed-cli/skills/cs-cli/SKILL.md \
+            || { echo "::error::cs-cli skill differs between the plugins; plugins/corespeed/skills/cs-cli/SKILL.md is the source — copy it over"; exit 1; }
       - name: Both manifests carry the same version
         run: |
           codex=$(jq -r .version plugins/corespeed/.codex-plugin/plugin.json)

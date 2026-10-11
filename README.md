@@ -34,6 +34,20 @@ select **Authenticate** (or open **Settings → MCP servers → CoreSpeed**) and
 finish the sign-in in the browser. In the ChatGPT desktop app the plugin
 appears under the **CoreSpeed** marketplace once it has been added.
 
+## Codex, CLI only
+
+```bash
+codex plugin marketplace add corespeed-io/cs
+codex plugin add corespeed-cli@corespeed
+```
+
+This plugin registers no MCP server. Its `cs-cli` skill has the agent install
+the `cs` command-line tool, sign in once in the browser, and then find and call
+CoreSpeed tools from the shell (`cs mcp search`, `cs mcp get`, `cs mcp call`).
+Pick it when Codex cannot load your organization's full tool list, or when you
+want every call to go through the shell. It is the plugin meant for the
+OpenAI Plugins Directory.
+
 ## The `cs` CLI
 
 ```bash
@@ -45,19 +59,20 @@ cs login
 organizations, connects apps, and calls tools from a terminal. See the
 [CLI docs](https://corespeed.io/docs/cli).
 
-## What the plugin contains
+## What the plugins contain
 
-| Part | What it does |
-| --- | --- |
-| MCP server | `https://api.corespeed.io/mcp` with browser sign-in (OAuth 2.1 + PKCE). You never paste an API key. |
-| `cs-cli` skill | Using the `cs` CLI: sign-in, API keys, organizations, connectors, remote MCP servers, credit. |
-| `cs-api` skill | Calling CoreSpeed over HTTP from code and CI: credentials, `tools/list` and `tools/call`, error codes, credits. |
+| Plugin | Part | What it does |
+| --- | --- | --- |
+| `corespeed` | MCP server | `https://api.corespeed.io/mcp` with browser sign-in (OAuth 2.1 + PKCE). You never paste an API key. |
+| `corespeed` | `cs-cli` skill | Using the `cs` CLI: sign-in, finding and calling tools from a shell, memory, API keys, organizations, connectors, remote MCP servers, credit. |
+| `corespeed` | `cs-api` skill | Calling CoreSpeed over HTTP from code and CI: credentials, `tools/list` and `tools/call`, error codes, credits. |
+| `corespeed-cli` | `cs-cli` skill | The same skill, and nothing else: no MCP server is registered. |
 
 If you added CoreSpeed to your client by hand earlier (`claude mcp add` or
 `codex mcp add`), remove that entry before installing the plugin, so every
 tool is registered once.
 
-Sign-in happens at `login.corespeed.io`, and the plugin's only server is
+Sign-in happens at `login.corespeed.io`, and the plugins' only server is
 `https://api.corespeed.io/mcp`. Anything else claiming to be CoreSpeed is not
 this plugin.
 

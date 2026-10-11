@@ -1,0 +1,42 @@
+{
+  "name": "corespeed-cli",
+  "version": "0.1.0",
+  "description": "CoreSpeed from Codex through the cs command-line tool: sign in once in the browser, then search for a tool, read its schema, and call it from the shell — long-term memory shared across your agents, the tools your organization has enabled on CoreSpeed, and API keys for CI. Registers no MCP server.",
+  "author": {
+    "name": "CoreSpeed",
+    "email": "contact@corespeed.io",
+    "url": "https://corespeed.io"
+  },
+  "homepage": "https://corespeed.io/docs/cli",
+  "repository": "https://github.com/corespeed-io/cs",
+  "license": "Apache-2.0",
+  "keywords": [
+    "corespeed",
+    "cli",
+    "memory",
+    "agents"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "CoreSpeed CLI",
+    "shortDescription": "CoreSpeed tools and shared memory from the shell",
+    "longDescription": "CoreSpeed gives your organization one place for agent tools: long-term memory shared across agents, the tools of the apps your organization has enabled, and API keys with spend caps and an audit trail. This plugin brings it to Codex through the cs command-line tool. Sign in once in the browser; after that the agent searches for a tool, reads its schema, and calls it from the shell, with every call metered and, where your organization requires it, approved by a human first. It registers no MCP server.",
+    "developerName": "CoreSpeed",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://corespeed.io",
+    "privacyPolicyURL": "https://corespeed.io/privacy",
+    "defaultPrompt": [
+      "Sign me in to CoreSpeed with the cs CLI and tell me which organization I am using.",
+      "Search my CoreSpeed memory for context on this repository before we start.",
+      "Find the CoreSpeed tool for this task with cs mcp search, show me its schema, then call it."
+    ],
+    "brandColor": "#C2410C",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/logo.svg",
+    "termsOfServiceURL": "https://corespeed.io/terms"
+  }
+}
