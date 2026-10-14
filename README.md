@@ -34,6 +34,16 @@ select **Authenticate** (or open **Settings → MCP servers → CoreSpeed**) and
 finish the sign-in in the browser. In the ChatGPT desktop app the plugin
 appears under the **CoreSpeed** marketplace once it has been added.
 
+In Codex the plugin's server (the root `.mcp.json`, the one file the OpenAI
+Plugins Directory accepts) is `https://api.corespeed.io/mcp/plugin/chatgpt`: a
+fixed, small tool list — shared memory and connector discovery — that no
+organization's connector count can push past Codex's catalog limit. Claude Code
+gets the full `https://api.corespeed.io/mcp` from `.mcp.claude.json`, which its
+manifest declares and which replaces the root entry by name. The agent
+finds an app with `manage__connectors_search`, hands you a link to connect it,
+and calls a connected app's tools through the bundled `cs-cli` skill
+(`cs mcp search`, `cs mcp get`, `cs mcp call`).
+
 ## Codex, CLI only
 
 ```bash
@@ -63,7 +73,7 @@ organizations, connects apps, and calls tools from a terminal. See the
 
 | Plugin | Part | What it does |
 | --- | --- | --- |
-| `corespeed` | MCP server | `https://api.corespeed.io/mcp` with browser sign-in (OAuth 2.1 + PKCE). You never paste an API key. |
+| `corespeed` | MCP server | Browser sign-in (OAuth 2.1 + PKCE), never a pasted key. Claude Code: the full `https://api.corespeed.io/mcp`. Codex: the plugin surface `https://api.corespeed.io/mcp/plugin/chatgpt` (memory, connector discovery). |
 | `corespeed` | `cs-cli` skill | Using the `cs` CLI: sign-in, finding and calling tools from a shell, memory, API keys, organizations, connectors, remote MCP servers, credit. |
 | `corespeed` | `cs-api` skill | Calling CoreSpeed over HTTP from code and CI: credentials, `tools/list` and `tools/call`, error codes, credits. |
 | `corespeed-cli` | `cs-cli` skill | The same skill, and nothing else: no MCP server is registered. |
@@ -72,9 +82,9 @@ If you added CoreSpeed to your client by hand earlier (`claude mcp add` or
 `codex mcp add`), remove that entry before installing the plugin, so every
 tool is registered once.
 
-Sign-in happens at `login.corespeed.io`, and the plugins' only server is
-`https://api.corespeed.io/mcp`. Anything else claiming to be CoreSpeed is not
-this plugin.
+Sign-in happens at `login.corespeed.io`, and the plugins' only servers are
+`https://api.corespeed.io/mcp` and `https://api.corespeed.io/mcp/plugin/chatgpt`.
+Anything else claiming to be CoreSpeed is not this plugin.
 
 ## Other clients
 
