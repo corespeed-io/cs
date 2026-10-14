@@ -9,10 +9,13 @@ description: Use when a task needs the CoreSpeed CLI (cs, npm package @corespeed
 under a member session stored on this machine. It needs Node.js 20 or Bun and
 has no runtime dependencies.
 
-If your client already has the CoreSpeed MCP server
-(`https://api.corespeed.io/mcp`), call its tools directly. Use `cs` when it
-does not: a plugin without an MCP server, a client that cannot load a large
-tool list, a human at a terminal, or a CI job that needs an API key.
+If your client has the full CoreSpeed MCP server
+(`https://api.corespeed.io/mcp`), call its tools directly. The Codex plugin's
+server (`https://api.corespeed.io/mcp/plugin/chatgpt`) carries memory and
+connector discovery only, so there a connected app's tools are called with
+`cs`. Use `cs` as well when there is no MCP server, when a client cannot load a
+large tool list, when a human is at a terminal, or when a CI job needs an API
+key.
 
 The canonical reference is https://corespeed.io/docs/cli. When this skill and
 the docs disagree, the docs win.
