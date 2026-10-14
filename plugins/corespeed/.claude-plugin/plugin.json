@@ -10,5 +10,13 @@
   "homepage": "https://corespeed.io/docs",
   "repository": "https://github.com/corespeed-io/cs",
   "license": "Apache-2.0",
-  "keywords": ["corespeed", "mcp", "memory", "connectors", "cli", "agents"]
+  "keywords": [
+    "corespeed",
+    "mcp",
+    "memory",
+    "connectors",
+    "cli",
+    "agents"
+  ],
+  "mcpServers": "./.mcp.claude.json"
 }

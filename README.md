@@ -34,9 +34,12 @@ select **Authenticate** (or open **Settings → MCP servers → CoreSpeed**) and
 finish the sign-in in the browser. In the ChatGPT desktop app the plugin
 appears under the **CoreSpeed** marketplace once it has been added.
 
-In Codex the plugin's server is `https://api.corespeed.io/mcp/plugin/chatgpt`:
-a fixed, small tool list — shared memory and connector discovery — that no
-organization's connector count can push past Codex's catalog limit. The agent
+In Codex the plugin's server (the root `.mcp.json`, the one file the OpenAI
+Plugins Directory accepts) is `https://api.corespeed.io/mcp/plugin/chatgpt`: a
+fixed, small tool list — shared memory and connector discovery — that no
+organization's connector count can push past Codex's catalog limit. Claude Code
+gets the full `https://api.corespeed.io/mcp` from `.mcp.claude.json`, which its
+manifest declares and which replaces the root entry by name. The agent
 finds an app with `manage__connectors_search`, hands you a link to connect it,
 and calls a connected app's tools through the bundled `cs-cli` skill
 (`cs mcp search`, `cs mcp get`, `cs mcp call`).

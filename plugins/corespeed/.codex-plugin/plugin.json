@@ -19,7 +19,7 @@
     "agents"
   ],
   "skills": "./skills/",
-  "mcpServers": "./.mcp.codex.json",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "CoreSpeed",
     "shortDescription": "Shared memory, connector discovery, and your apps' tools through the cs CLI",

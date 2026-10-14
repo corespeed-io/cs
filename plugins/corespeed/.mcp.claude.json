@@ -2,7 +2,7 @@
   "mcpServers": {
     "corespeed": {
       "type": "http",
-      "url": "https://api.corespeed.io/mcp/plugin/chatgpt"
+      "url": "https://api.corespeed.io/mcp"
     }
   }
 }
