@@ -1,0 +1,19 @@
+{
+  "name": "corespeed",
+  "displayName": "CoreSpeed",
+  "version": "0.2.1",
+  "description": "Your connected apps, shared memory, media, web and social tools through one MCP server with browser sign-in, plus skills for the cs CLI and the HTTP API.",
+  "author": {
+    "name": "CoreSpeed",
+    "email": "contact@corespeed.io"
+  },
+  "homepage": "https://corespeed.io/docs",
+  "repository": "https://github.com/corespeed-io/cs",
+  "license": "Apache-2.0",
+  "logo": "assets/app-icon.svg",
+  "keywords": ["corespeed", "mcp", "memory", "connectors", "cli", "agents"],
+  "category": "integrations",
+  "tags": ["corespeed", "mcp", "memory", "connectors"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

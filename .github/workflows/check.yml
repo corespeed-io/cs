@@ -17,8 +17,9 @@ jobs:
           persist-credentials: false
       - name: Manifests are valid JSON
         run: |
-          for f in .agents/plugins/marketplace.json .claude-plugin/marketplace.json \
+          for f in .agents/plugins/marketplace.json .claude-plugin/marketplace.json .cursor-plugin/marketplace.json \
             plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed/.claude-plugin/plugin.json \
+            plugins/corespeed/.cursor-plugin/plugin.json \
             plugins/corespeed/.mcp.json plugins/corespeed-cli/.codex-plugin/plugin.json; do
             jq empty "$f" || { echo "::error file=$f::invalid JSON"; exit 1; }
           done
@@ -41,11 +42,21 @@ jobs:
             || { echo "::error file=plugins/corespeed-cli/.codex-plugin/plugin.json::skills-only plugin: no mcpServers"; exit 1; }
           cmp -s plugins/corespeed/skills/cs-cli/SKILL.md plugins/corespeed-cli/skills/cs-cli/SKILL.md \
             || { echo "::error::cs-cli skill differs between the plugins; plugins/corespeed/skills/cs-cli/SKILL.md is the source — copy it over"; exit 1; }
-      - name: Both manifests carry the same version
+      - name: All corespeed manifests carry the same version
         run: |
           codex=$(jq -r .version plugins/corespeed/.codex-plugin/plugin.json)
           claude=$(jq -r .version plugins/corespeed/.claude-plugin/plugin.json)
-          [ "$codex" = "$claude" ] || { echo "::error::Codex manifest is $codex, Claude Code manifest is $claude"; exit 1; }
+          cursor=$(jq -r .version plugins/corespeed/.cursor-plugin/plugin.json)
+          [ "$codex" = "$claude" ] && [ "$codex" = "$cursor" ] \
+            || { echo "::error::Codex manifest is $codex, Claude Code manifest is $claude, Cursor manifest is $cursor"; exit 1; }
+      - name: The Cursor plugin uses the same MCP entry
+        # Cursor reads the shared .mcp.json through the manifest, so the OAuth
+        # check above covers it too. A second MCP file would drift.
+        run: |
+          jq -e '.mcpServers == "./.mcp.json"' plugins/corespeed/.cursor-plugin/plugin.json > /dev/null \
+            || { echo "::error file=plugins/corespeed/.cursor-plugin/plugin.json::mcpServers must be ./.mcp.json"; exit 1; }
+          test ! -e plugins/corespeed/mcp.json \
+            || { echo "::error::plugins/corespeed/mcp.json would shadow .mcp.json in Cursor; keep one MCP file"; exit 1; }
 
   scan:
     runs-on: ubuntu-latest

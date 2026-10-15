@@ -7,8 +7,8 @@ long-term memory shared across agents, media generation and understanding,
 live web search, and public social data, all billed to one wallet with spend
 caps and an audit trail.
 
-This repository holds the CoreSpeed plugin for Claude Code and Codex, and the
-agent skills it bundles. The `cs` command-line tool is published to npm as
+This repository holds the CoreSpeed plugin for Claude Code, Codex and Cursor,
+and the agent skills it bundles. The `cs` command-line tool is published to npm as
 [`@corespeed/cs`](https://www.npmjs.com/package/@corespeed/cs).
 
 ## Claude Code
@@ -48,6 +48,16 @@ Pick it when Codex cannot load your organization's full tool list, or when you
 want every call to go through the shell. It is the plugin meant for the
 OpenAI Plugins Directory.
 
+## Cursor and Grok Bot
+
+In Cursor, open **Customize**, search the Marketplace for **CoreSpeed**, and
+install it. Pick the CoreSpeed MCP server and sign in in the browser when
+Cursor asks. Grok Bot loads plugins from the Cursor Marketplace, so the same
+plugin works there.
+
+To try this repository before a Marketplace release, copy `plugins/corespeed`
+to `~/.cursor/plugins/local/corespeed` and reload the window.
+
 ## The `cs` CLI
 
 ```bash
@@ -68,9 +78,9 @@ organizations, connects apps, and calls tools from a terminal. See the
 | `corespeed` | `cs-api` skill | Calling CoreSpeed over HTTP from code and CI: credentials, `tools/list` and `tools/call`, error codes, credits. |
 | `corespeed-cli` | `cs-cli` skill | The same skill, and nothing else: no MCP server is registered. |
 
-If you added CoreSpeed to your client by hand earlier (`claude mcp add` or
-`codex mcp add`), remove that entry before installing the plugin, so every
-tool is registered once.
+If you added CoreSpeed to your client by hand earlier (`claude mcp add`,
+`codex mcp add`, or an entry in Cursor's `mcp.json`), remove that entry
+before installing the plugin, so every tool is registered once.
 
 Sign-in happens at `login.corespeed.io`, and the plugins' only server is
 `https://api.corespeed.io/mcp`. Anything else claiming to be CoreSpeed is not
@@ -78,7 +88,7 @@ this plugin.
 
 ## Other clients
 
-Cursor, Copilot in VS Code, Claude.ai, ChatGPT, and any client that speaks
+Copilot in VS Code, Claude.ai, ChatGPT, and any client that speaks
 Streamable HTTP with MCP authorization connect with the URL alone. Per-client
 setup is at https://corespeed.io/docs/mcp.
 
