@@ -1,7 +1,7 @@
 {
   "name": "corespeed",
-  "version": "0.2.1",
-  "description": "Connect Codex to CoreSpeed: your connected apps, shared memory, media, web and social tools through one MCP server, plus skills for the cs CLI and the HTTP API.",
+  "version": "0.2.2",
+  "description": "Connect Codex to CoreSpeed: your connected apps, shared memory, Drive, media, web and social tools through one MCP server, plus skills for the cs CLI and the HTTP API.",
   "author": {
     "name": "CoreSpeed",
     "email": "contact@corespeed.io",
@@ -14,6 +14,7 @@
     "corespeed",
     "mcp",
     "memory",
+    "drive",
     "connectors",
     "cli",
     "agents"
@@ -23,7 +24,7 @@
   "interface": {
     "displayName": "CoreSpeed",
     "shortDescription": "Connected apps, memory and tools for agents",
-    "longDescription": "Connect Codex to CoreSpeed's MCP server with a browser sign-in: the tools of every app your organization has connected, long-term memory shared across agents, media generation and understanding, live web search and public social data, all on one wallet with spend caps and an audit trail. Bundled skills cover the cs CLI and calling CoreSpeed over HTTP from code and CI.",
+    "longDescription": "Connect Codex to CoreSpeed's MCP server with a browser sign-in: the tools of every app your organization has connected, long-term memory shared across agents, a Drive every tool reads and writes, media generation and understanding, live web search and public social data, all on one wallet with spend caps and an audit trail. Bundled skills cover the cs CLI and calling CoreSpeed over HTTP from code and CI.",
     "developerName": "CoreSpeed",
     "category": "Developer Tools",
     "capabilities": [
