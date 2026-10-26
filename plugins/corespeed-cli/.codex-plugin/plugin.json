@@ -32,7 +32,6 @@
     "privacyPolicyURL": "https://corespeed.io/privacy",
     "defaultPrompt": [
       "Sign me in to CoreSpeed with the cs CLI and tell me which organization I am using.",
-      "Search my CoreSpeed memory for context on this repository before we start.",
       "Find the CoreSpeed tool for this task with cs mcp search, show me its schema, then call it.",
       "Upload this file to my CoreSpeed Drive with cs drive put and share it with the organization."
     ],
