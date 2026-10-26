@@ -36,11 +36,10 @@ appears under the **CoreSpeed** marketplace once it has been added.
 
 In Codex the plugin's server (the root `.mcp.json`, the one file the OpenAI
 Plugins Directory accepts) is `https://api.corespeed.io/mcp/plugin/chatgpt`: a
-fixed, small tool list — shared memory and connector discovery — that no
+fixed, small tool list — shared memory — that no
 organization's connector count can push past Codex's catalog limit. Claude Code
 gets the full `https://api.corespeed.io/mcp` from `.mcp.claude.json`, which its
 manifest declares and which replaces the root entry by name. The agent
-finds an app with `manage__connectors_search`, hands you a link to connect it,
 calls a connected app's tools through the bundled `cs-cli` skill
 (`cs mcp search`, `cs mcp get`, `cs mcp call`), and moves files in and out
 of the organization's Drive with `cs drive`.
@@ -68,8 +67,8 @@ Cursor asks. Grok Bot loads plugins from the Cursor Marketplace, so the same
 plugin works there.
 
 Cursor reads the same root `.mcp.json` as Codex, so its server is the plugin
-surface `https://api.corespeed.io/mcp/plugin/chatgpt`: shared memory and
-connector discovery, a list no organization's connector count can grow past
+surface `https://api.corespeed.io/mcp/plugin/chatgpt`: shared memory, a
+list no organization's connector count can grow past
 what Cursor loads. A connected app's tools and the organization's Drive are
 reached through the bundled `cs-cli` skill (`cs mcp call`, `cs drive`).
 
@@ -91,7 +90,7 @@ organizations, connects apps, and calls tools from a terminal. See the
 
 | Plugin | Part | What it does |
 | --- | --- | --- |
-| `corespeed` | MCP server | Browser sign-in (OAuth 2.1 + PKCE), never a pasted key. Claude Code: the full `https://api.corespeed.io/mcp`. Codex and Cursor: the plugin surface `https://api.corespeed.io/mcp/plugin/chatgpt` (memory, connector discovery). |
+| `corespeed` | MCP server | Browser sign-in (OAuth 2.1 + PKCE), never a pasted key. Claude Code: the full `https://api.corespeed.io/mcp`. Codex and Cursor: the plugin surface `https://api.corespeed.io/mcp/plugin/chatgpt` (memory). |
 | `corespeed` | `cs-cli` skill | Using the `cs` CLI: sign-in, finding and calling tools from a shell, memory, files in the Drive, API keys, organizations, connectors, remote MCP servers, credit. |
 | `corespeed` | `cs-api` skill | Calling CoreSpeed over HTTP from code and CI: credentials, `tools/list` and `tools/call`, error codes, credits. |
 | `corespeed-cli` | `cs-cli` skill | The same skill, and nothing else: no MCP server is registered. |
