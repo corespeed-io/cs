@@ -60,7 +60,7 @@ const res = await fetch("https://api.corespeed.io/mcp", {
     id: 1,
     method: "tools/call",
     params: {
-      name: "memory__search_memory",
+      name: "memory__search",
       arguments: { query: "rollout window" },
     },
   }),

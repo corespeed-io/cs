@@ -70,6 +70,16 @@ jobs:
             jq -e '(.interface.defaultPrompt // []) | (type == "string") or (length <= 3 and all(type == "string" and length > 0))' "$f" > /dev/null \
               || { echo "::error file=$f::interface.defaultPrompt must be at most three non-empty strings"; exit 1; }
           done
+      - name: Short descriptions fit the Directory listing
+        # Final Directory submission refuses interface.shortDescription over 30
+        # characters (submission_subtitle_too_long), a tighter limit than the
+        # 240 package validation allows; held here so a manifest never passes
+        # review and fails at submission.
+        run: |
+          for f in plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed-cli/.codex-plugin/plugin.json; do
+            jq -e '.interface.shortDescription | type == "string" and length > 0 and length <= 30' "$f" > /dev/null \
+              || { echo "::error file=$f::interface.shortDescription must be 1–30 characters for Directory submission"; exit 1; }
+          done
       - name: All corespeed manifests carry the same version
         run: |
           codex=$(jq -r .version plugins/corespeed/.codex-plugin/plugin.json)
