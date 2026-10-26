@@ -20,17 +20,35 @@ jobs:
           for f in .agents/plugins/marketplace.json .claude-plugin/marketplace.json .cursor-plugin/marketplace.json \
             plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed/.claude-plugin/plugin.json \
             plugins/corespeed/.cursor-plugin/plugin.json \
-            plugins/corespeed/.mcp.json plugins/corespeed-cli/.codex-plugin/plugin.json; do
+            plugins/corespeed/.mcp.json plugins/corespeed/.mcp.claude.json plugins/corespeed-cli/.codex-plugin/plugin.json; do
             jq empty "$f" || { echo "::error file=$f::invalid JSON"; exit 1; }
           done
-      - name: The MCP server signs in with OAuth
+      - name: The MCP servers sign in with OAuth
         # The plugin must never ask for an API key: the client discovers the
-        # authorization server from the /mcp challenge (RFC 9728), so the entry
-        # carries only the URL — no headers, no token env var, no oauth_resource.
+        # authorization server from the server's challenge (RFC 9728), so each
+        # entry carries only the URL — no headers, no token env var, no oauth_resource.
         run: |
-          jq -e '.mcpServers | length == 1 and (.corespeed | keys == ["type", "url"]) and .corespeed.url == "https://api.corespeed.io/mcp"' \
-            plugins/corespeed/.mcp.json > /dev/null \
-            || { echo "::error file=plugins/corespeed/.mcp.json::expected exactly {type, url} pointing at https://api.corespeed.io/mcp"; exit 1; }
+          jq -e '.mcpServers | length == 1 and (.corespeed | keys == ["type", "url"])' plugins/corespeed/.mcp.json > /dev/null \
+            || { echo "::error file=plugins/corespeed/.mcp.json::expected exactly {type, url}"; exit 1; }
+          jq -e '.mcpServers | length == 1 and (.corespeed | keys == ["type", "url"])' plugins/corespeed/.mcp.claude.json > /dev/null \
+            || { echo "::error file=plugins/corespeed/.mcp.claude.json::expected exactly {type, url}"; exit 1; }
+      - name: Codex and the Directory get the plugin surface; Claude Code the full server
+        # The OpenAI Plugins Directory accepts mcpServers only as the root
+        # ./.mcp.json, so that file is the fixed plugin surface
+        # /mcp/plugin/chatgpt (memory, connector discovery), which no
+        # organization's connector count can push past Codex's catalog limit.
+        # Claude Code loads .mcp.json first and then the file its manifest
+        # names; the later `corespeed` entry replaces the earlier one, so it
+        # gets the full /mcp from .mcp.claude.json.
+        run: |
+          [ "$(jq -r .mcpServers plugins/corespeed/.codex-plugin/plugin.json)" = "./.mcp.json" ] \
+            || { echo "::error file=plugins/corespeed/.codex-plugin/plugin.json::mcpServers must be ./.mcp.json (the Directory accepts no other path)"; exit 1; }
+          [ "$(jq -r .mcpServers.corespeed.url plugins/corespeed/.mcp.json)" = "https://api.corespeed.io/mcp/plugin/chatgpt" ] \
+            || { echo "::error file=plugins/corespeed/.mcp.json::must point at https://api.corespeed.io/mcp/plugin/chatgpt"; exit 1; }
+          [ "$(jq -r .mcpServers plugins/corespeed/.claude-plugin/plugin.json)" = "./.mcp.claude.json" ] \
+            || { echo "::error file=plugins/corespeed/.claude-plugin/plugin.json::mcpServers must be ./.mcp.claude.json"; exit 1; }
+          [ "$(jq -r .mcpServers.corespeed.url plugins/corespeed/.mcp.claude.json)" = "https://api.corespeed.io/mcp" ] \
+            || { echo "::error file=plugins/corespeed/.mcp.claude.json::must point at https://api.corespeed.io/mcp"; exit 1; }
       - name: The CLI plugin is skills-only and bundles the same cs-cli skill
         # corespeed-cli registers no MCP server: that is the point of it (a
         # client loads no tool list). Its cs-cli skill is a copy of the MCP
@@ -42,6 +60,16 @@ jobs:
             || { echo "::error file=plugins/corespeed-cli/.codex-plugin/plugin.json::skills-only plugin: no mcpServers"; exit 1; }
           cmp -s plugins/corespeed/skills/cs-cli/SKILL.md plugins/corespeed-cli/skills/cs-cli/SKILL.md \
             || { echo "::error::cs-cli skill differs between the plugins; plugins/corespeed/skills/cs-cli/SKILL.md is the source — copy it over"; exit 1; }
+      - name: At most three default prompts
+        # The Plugins Directory refuses a Codex manifest whose
+        # interface.defaultPrompt has more than three entries
+        # (plugin_default_prompt_too_many); the limit is checked here, not
+        # at submission time.
+        run: |
+          for f in plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed-cli/.codex-plugin/plugin.json; do
+            jq -e '(.interface.defaultPrompt // []) | (type == "string") or (length <= 3 and all(type == "string" and length > 0))' "$f" > /dev/null \
+              || { echo "::error file=$f::interface.defaultPrompt must be at most three non-empty strings"; exit 1; }
+          done
       - name: All corespeed manifests carry the same version
         run: |
           codex=$(jq -r .version plugins/corespeed/.codex-plugin/plugin.json)
@@ -49,9 +77,11 @@ jobs:
           cursor=$(jq -r .version plugins/corespeed/.cursor-plugin/plugin.json)
           [ "$codex" = "$claude" ] && [ "$codex" = "$cursor" ] \
             || { echo "::error::Codex manifest is $codex, Claude Code manifest is $claude, Cursor manifest is $cursor"; exit 1; }
-      - name: The Cursor plugin uses the same MCP entry
-        # Cursor reads the shared .mcp.json through the manifest, so the OAuth
-        # check above covers it too. A second MCP file would drift.
+      - name: The Cursor plugin uses the plugin surface
+        # Cursor reads the root .mcp.json through its manifest — the same
+        # fixed plugin surface Codex gets, since Cursor loads every tool of a
+        # server up front too — so the OAuth and surface checks above cover
+        # it. A second mcp.json would shadow .mcp.json in Cursor and drift.
         run: |
           jq -e '.mcpServers == "./.mcp.json"' plugins/corespeed/.cursor-plugin/plugin.json > /dev/null \
             || { echo "::error file=plugins/corespeed/.cursor-plugin/plugin.json::mcpServers must be ./.mcp.json"; exit 1; }

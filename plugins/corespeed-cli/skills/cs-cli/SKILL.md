@@ -1,6 +1,6 @@
 ---
 name: cs-cli
-description: Use when a task needs the CoreSpeed CLI (cs, npm package @corespeed/cs) — signing in from a terminal, finding a CoreSpeed tool for a task and calling it from a shell (cs mcp search, cs mcp get, cs mcp call), searching or saving shared memory, minting or rotating sk-cs- API keys for CI, switching organizations, connecting apps, registering an organization's own MCP servers, or checking credit. Triggers on "cs login", "cs mcp search", "cs mcp call", "cs keys create", "cs switch", "cs token", "cs connectors", "cs remote", "cs usage", "cs mcp-config", or "@corespeed/cs".
+description: Use when a task needs the CoreSpeed CLI (cs, npm package @corespeed/cs) — signing in from a terminal, finding a CoreSpeed tool for a task and calling it from a shell (cs mcp search, cs mcp get, cs mcp call), searching or saving shared memory, uploading a local file to the organization's Drive or downloading one from it (cs drive put, cs drive get), minting or rotating sk-cs- API keys for CI, switching organizations, connecting apps, registering an organization's own MCP servers, or checking credit. Triggers on "cs login", "cs mcp search", "cs mcp call", "cs drive", "cs keys create", "cs switch", "cs token", "cs connectors", "cs remote", "cs usage", "cs mcp-config", or "@corespeed/cs".
 ---
 
 # CoreSpeed CLI (`cs`)
@@ -9,10 +9,13 @@ description: Use when a task needs the CoreSpeed CLI (cs, npm package @corespeed
 under a member session stored on this machine. It needs Node.js 20 or Bun and
 has no runtime dependencies.
 
-If your client already has the CoreSpeed MCP server
-(`https://api.corespeed.io/mcp`), call its tools directly. Use `cs` when it
-does not: a plugin without an MCP server, a client that cannot load a large
-tool list, a human at a terminal, or a CI job that needs an API key.
+If your client has the full CoreSpeed MCP server
+(`https://api.corespeed.io/mcp`), call its tools directly. The Codex plugin's
+server (`https://api.corespeed.io/mcp/plugin/chatgpt`) carries memory and
+connector discovery only, so there a connected app's tools are called with
+`cs`. Use `cs` as well when there is no MCP server, when a client cannot load a
+large tool list, when a human is at a terminal, or when a CI job needs an API
+key.
 
 The canonical reference is https://corespeed.io/docs/cli. When this skill and
 the docs disagree, the docs win.
@@ -69,9 +72,13 @@ The exit code says what the tool did (table below), so check it before
 reading the output. `cs mcp list` prints every tool you can
 call, one line each; `--json` prints their definitions.
 
-Tool names are `<prefix>__<tool>`: `memory__*` is shared memory, `manage__*`
-is your account and keys, and each app your organization has connected has its
-own prefix.
+Tool names are `<prefix>__<tool>`: `memory__*` is shared memory, `drive__*`
+the organization's file system, `media__*` media generation and
+understanding, `web__*` live web search and scraping, `social__*` public
+social data, `mail__*` agent mail where it is on, `manage__*` your account
+and keys, and each app your organization has connected has its own prefix.
+A prefix that is not in `cs mcp list` is switched off for you or not
+connected; it is not missing from the CLI.
 
 ### Memory
 
@@ -81,9 +88,36 @@ short queries before planning. After significant work, save the durable
 decisions and conventions.
 
 ```bash
-cs mcp call memory__search_memory '{"query": "deploy process", "limit": 5}'
+cs mcp call memory__search '{"query": "deploy process", "limit": 5}'
 cs mcp call memory__remember '{"memory": "Staging deploys go through bart, never wrangler directly.", "scope": "shared"}'
 ```
+
+### Drive
+
+The organization's Drive is where files live: every file a tool takes or
+makes has a path there, like `reports/q3.pdf`, private to you or shared with
+the organization. Bytes never travel through tool arguments, so `cs mcp call`
+alone cannot move a local file; `cs drive` does, with a local file on one
+end:
+
+```bash
+cs drive put ./q3.pdf reports/q3.pdf          # upload; a new version if the path exists
+cs drive put ./README.md docs/readme.md --access org   # a new path every member sees
+cs drive get reports/q3.pdf ~/Downloads/      # download by path, drv_* file id or dver_* version id
+cs drive get notes/todo.md -                  # bytes to stdout
+cs drive ls reports/                          # a folder; --recursive, --json
+cs drive mv tmp/uploads/x.png shots/x.png     # rename or move; out of tmp/ keeps it
+cs drive share reports/q3.pdf link            # private | org | link | public; --rotate
+cs drive rm reports/old.pdf                   # not reversible
+cs drive usage                                # kept bytes against the plan
+```
+
+`put` prints the stored file (`path`, `file_id`, `version_id`, `size_bytes`,
+`sha256`); `get` prints one line naming where the bytes went. Text up to
+1 MiB can also be stored straight from arguments with
+`cs mcp call drive__put '{"path": "notes/a.md", "text": "..."}'`, and the
+other Drive tools (the change feed, S3 credentials for rclone or the AWS CLI)
+are `cs mcp call drive__…`. Anything under `tmp/` expires after 7 days.
 
 ### Approvals
 
@@ -130,6 +164,13 @@ Do not change the user's sandbox settings yourself; ask.
 | `cs mcp get <tool> [--json]` | One tool in full: description, input schema, a call to start from; `--json` prints its definition verbatim |
 | `cs mcp call <tool> [json] [--raw]` | Call a tool and print its result; exits non-zero when the tool did not do what it was asked |
 | `cs mcp list [--json]` | Every tool, one line each; `--json` prints their definitions |
+| `cs drive put <file> <path> [--mime <type>] [--access private\|org]` | Upload a local file to a Drive path; a new version when the path exists |
+| `cs drive get <path\|file_id\|version_id> [<file> \| -]` | Download a Drive file to a local file (its own name by default) or stdout |
+| `cs drive ls [<prefix>] [--recursive] [--json]` | List a folder, or everything under a prefix |
+| `cs drive mv <from> <to>` | Rename or move a file; leaving `tmp/` keeps it |
+| `cs drive rm <path>` | Delete a file and every version of it |
+| `cs drive share <path> private\|org\|link\|public [--rotate]` | Who can see a file; `link` and `public` answer a `share_url` |
+| `cs drive usage` | Kept bytes against the plan, and what sits under `tmp/` |
 | `cs connectors list` | Connectors offered to you, with status and account aliases |
 | `cs connectors connect <id>` | Open the connect flow in the browser |
 | `cs connectors disconnect <id> [--account <alias>]` | Remove a connected account |

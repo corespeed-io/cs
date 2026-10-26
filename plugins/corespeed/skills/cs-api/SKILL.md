@@ -8,7 +8,9 @@ description: Use when calling CoreSpeed over HTTP from code, CI, or a headless a
 CoreSpeed is one authenticated MCP server, `https://api.corespeed.io/mcp`,
 that carries the tools of the apps an organization has connected, long-term
 memory, media generation and understanding, live web search, and public social
-data. An agent with this plugin installed already has it as an MCP server; this
+data. An agent with this plugin installed already has it — or, in Codex, the
+plugin surface `https://api.corespeed.io/mcp/plugin/chatgpt` (memory and
+connector discovery), which takes the same credentials — as an MCP server; this
 skill is for code that talks to it directly: a service, a CI job, a script, or
 a client without OAuth.
 
@@ -26,7 +28,7 @@ decides which tools, accounts, and memories the response contains.
 
 | Credential | Who is calling | Use it for |
 | --- | --- | --- |
-| Browser sign-in (MCP OAuth token) | A member, from an OAuth-capable client | Interactive agents. Accepted on `POST /mcp` only |
+| Browser sign-in (MCP OAuth token) | A member, from an OAuth-capable client | Interactive agents. Accepted on `POST /mcp` and `POST /mcp/plugin/<name>` (one token, the URL picks the surface) |
 | `sk-cs-…` API key | The member who created it | CI, services, clients without OAuth |
 | `sk-csa-…` agent key | An agent principal with its own identity | Unattended agents; reaches the organization's shared accounts only |
 | Session JWT | A member, from the `cs` CLI or the dashboard | One-off scripts (`cs token`); lives five minutes |
