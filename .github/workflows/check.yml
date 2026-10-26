@@ -17,8 +17,9 @@ jobs:
           persist-credentials: false
       - name: Manifests are valid JSON
         run: |
-          for f in .agents/plugins/marketplace.json .claude-plugin/marketplace.json \
+          for f in .agents/plugins/marketplace.json .claude-plugin/marketplace.json .cursor-plugin/marketplace.json \
             plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed/.claude-plugin/plugin.json \
+            plugins/corespeed/.cursor-plugin/plugin.json \
             plugins/corespeed/.mcp.json plugins/corespeed/.mcp.claude.json plugins/corespeed-cli/.codex-plugin/plugin.json; do
             jq empty "$f" || { echo "::error file=$f::invalid JSON"; exit 1; }
           done
@@ -69,11 +70,33 @@ jobs:
             jq -e '(.interface.defaultPrompt // []) | (type == "string") or (length <= 3 and all(type == "string" and length > 0))' "$f" > /dev/null \
               || { echo "::error file=$f::interface.defaultPrompt must be at most three non-empty strings"; exit 1; }
           done
-      - name: Both manifests carry the same version
+      - name: Short descriptions fit the Directory listing
+        # Final Directory submission refuses interface.shortDescription over 30
+        # characters (submission_subtitle_too_long), a tighter limit than the
+        # 240 package validation allows; held here so a manifest never passes
+        # review and fails at submission.
+        run: |
+          for f in plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed-cli/.codex-plugin/plugin.json; do
+            jq -e '.interface.shortDescription | type == "string" and length > 0 and length <= 30' "$f" > /dev/null \
+              || { echo "::error file=$f::interface.shortDescription must be 1–30 characters for Directory submission"; exit 1; }
+          done
+      - name: All corespeed manifests carry the same version
         run: |
           codex=$(jq -r .version plugins/corespeed/.codex-plugin/plugin.json)
           claude=$(jq -r .version plugins/corespeed/.claude-plugin/plugin.json)
-          [ "$codex" = "$claude" ] || { echo "::error::Codex manifest is $codex, Claude Code manifest is $claude"; exit 1; }
+          cursor=$(jq -r .version plugins/corespeed/.cursor-plugin/plugin.json)
+          [ "$codex" = "$claude" ] && [ "$codex" = "$cursor" ] \
+            || { echo "::error::Codex manifest is $codex, Claude Code manifest is $claude, Cursor manifest is $cursor"; exit 1; }
+      - name: The Cursor plugin uses the plugin surface
+        # Cursor reads the root .mcp.json through its manifest — the same
+        # fixed plugin surface Codex gets, since Cursor loads every tool of a
+        # server up front too — so the OAuth and surface checks above cover
+        # it. A second mcp.json would shadow .mcp.json in Cursor and drift.
+        run: |
+          jq -e '.mcpServers == "./.mcp.json"' plugins/corespeed/.cursor-plugin/plugin.json > /dev/null \
+            || { echo "::error file=plugins/corespeed/.cursor-plugin/plugin.json::mcpServers must be ./.mcp.json"; exit 1; }
+          test ! -e plugins/corespeed/mcp.json \
+            || { echo "::error::plugins/corespeed/mcp.json would shadow .mcp.json in Cursor; keep one MCP file"; exit 1; }
 
   scan:
     runs-on: ubuntu-latest

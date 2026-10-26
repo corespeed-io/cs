@@ -20,7 +20,7 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "CoreSpeed CLI",
-    "shortDescription": "CoreSpeed tools and shared memory from the shell",
+    "shortDescription": "CoreSpeed tools from the shell",
     "longDescription": "CoreSpeed gives your organization one place for agent tools: long-term memory shared across agents, a Drive every tool reads and writes, the tools of the apps your organization has enabled, and API keys with spend caps and an audit trail. This plugin brings it to Codex through the cs command-line tool. Sign in once in the browser; after that the agent searches for a tool, reads its schema, and calls it from the shell, uploads and downloads Drive files with cs drive, with every call metered and, where your organization requires it, approved by a human first. It registers no MCP server.",
     "developerName": "CoreSpeed",
     "category": "Developer Tools",

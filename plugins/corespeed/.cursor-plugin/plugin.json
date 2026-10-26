@@ -1,0 +1,32 @@
+{
+  "name": "corespeed",
+  "displayName": "CoreSpeed",
+  "version": "0.3.0",
+  "description": "Long-term memory shared across your agents and connector discovery through one MCP server with browser sign-in, the tools of your connected apps and the files in your organization's Drive through the cs CLI, plus skills for the CLI and the HTTP API.",
+  "author": {
+    "name": "CoreSpeed",
+    "email": "contact@corespeed.io"
+  },
+  "homepage": "https://corespeed.io/docs",
+  "repository": "https://github.com/corespeed-io/cs",
+  "license": "Apache-2.0",
+  "logo": "assets/app-icon.svg",
+  "keywords": [
+    "corespeed",
+    "mcp",
+    "memory",
+    "drive",
+    "connectors",
+    "cli",
+    "agents"
+  ],
+  "category": "integrations",
+  "tags": [
+    "corespeed",
+    "mcp",
+    "memory",
+    "connectors"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}
