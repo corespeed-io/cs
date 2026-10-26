@@ -1,7 +1,7 @@
 {
   "name": "corespeed",
   "version": "0.3.0",
-  "description": "Connect Codex to CoreSpeed: long-term memory shared across your agents and connector discovery through one MCP server, the tools of your connected apps through the cs CLI, plus skills for the CLI and the HTTP API.",
+  "description": "Connect Codex to CoreSpeed: long-term memory shared across your agents and connector discovery through one MCP server, the tools of your connected apps and the files in your organization's Drive through the cs CLI, plus skills for the CLI and the HTTP API.",
   "author": {
     "name": "CoreSpeed",
     "email": "contact@corespeed.io",
@@ -14,6 +14,7 @@
     "corespeed",
     "mcp",
     "memory",
+    "drive",
     "connectors",
     "cli",
     "agents"
@@ -22,8 +23,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "CoreSpeed",
-    "shortDescription": "Shared memory, connector discovery, and your apps' tools through the cs CLI",
-    "longDescription": "Connect Codex to CoreSpeed with a browser sign-in. The plugin's MCP server carries long-term memory shared across your organization's agents and connector discovery: the agent finds an app your organization uses, sees whether it is connected, and hands you a one-click link to connect it. The tools of connected apps are called through the bundled cs CLI skill (cs mcp search, cs mcp get, cs mcp call), so Codex loads a small, fixed tool list whatever your organization has connected. Every call is metered on one wallet with spend caps and an audit trail, and a human can be asked to approve a write first.",
+    "shortDescription": "Shared memory, connector discovery, and your apps' tools and files through the cs CLI",
+    "longDescription": "Connect Codex to CoreSpeed with a browser sign-in. The plugin's MCP server carries long-term memory shared across your organization's agents and connector discovery: the agent finds an app your organization uses, sees whether it is connected, and hands you a one-click link to connect it. The tools of connected apps are called through the bundled cs CLI skill (cs mcp search, cs mcp get, cs mcp call), and files move in and out of the organization's Drive with cs drive, so Codex loads a small, fixed tool list whatever your organization has connected. Every call is metered on one wallet with spend caps and an audit trail, and a human can be asked to approve a write first.",
     "developerName": "CoreSpeed",
     "category": "Developer Tools",
     "capabilities": [

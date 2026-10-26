@@ -59,6 +59,16 @@ jobs:
             || { echo "::error file=plugins/corespeed-cli/.codex-plugin/plugin.json::skills-only plugin: no mcpServers"; exit 1; }
           cmp -s plugins/corespeed/skills/cs-cli/SKILL.md plugins/corespeed-cli/skills/cs-cli/SKILL.md \
             || { echo "::error::cs-cli skill differs between the plugins; plugins/corespeed/skills/cs-cli/SKILL.md is the source — copy it over"; exit 1; }
+      - name: At most three default prompts
+        # The Plugins Directory refuses a Codex manifest whose
+        # interface.defaultPrompt has more than three entries
+        # (plugin_default_prompt_too_many); the limit is checked here, not
+        # at submission time.
+        run: |
+          for f in plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed-cli/.codex-plugin/plugin.json; do
+            jq -e '(.interface.defaultPrompt // []) | (type == "string") or (length <= 3 and all(type == "string" and length > 0))' "$f" > /dev/null \
+              || { echo "::error file=$f::interface.defaultPrompt must be at most three non-empty strings"; exit 1; }
+          done
       - name: Both manifests carry the same version
         run: |
           codex=$(jq -r .version plugins/corespeed/.codex-plugin/plugin.json)
