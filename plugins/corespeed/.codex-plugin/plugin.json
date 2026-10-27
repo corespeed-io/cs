@@ -1,6 +1,6 @@
 {
   "name": "corespeed",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Connect Codex to CoreSpeed: long-term memory shared across your agents and connector discovery through one MCP server, the tools of your connected apps and the files in your organization's Drive through the cs CLI, plus skills for the CLI and the HTTP API.",
   "author": {
     "name": "CoreSpeed",
@@ -24,7 +24,7 @@
   "interface": {
     "displayName": "CoreSpeed",
     "shortDescription": "Shared memory for your agents",
-    "longDescription": "Connect Codex to CoreSpeed with a browser sign-in. The plugin's MCP server carries long-term memory shared across your organization's agents: Codex looks up earlier decisions, conventions and preferences before it acts, saves new ones, and corrects stale ones. It also finds the apps your organization uses on CoreSpeed: when a task needs one that is not connected, Codex hands you a link to connect it and waits until it is ready. The tools of connected apps are called through the bundled cs CLI skill (cs mcp search, cs mcp get, cs mcp call), and files move in and out of the organization's Drive with cs drive, so Codex loads a small, fixed tool list whatever your organization has connected. Every call is metered on one wallet with spend caps and an audit trail, and a human can be asked to approve a write first.",
+    "longDescription": "Connect Codex to CoreSpeed with a browser sign-in. The plugin's MCP server carries long-term memory shared across your organization's agents: Codex looks up earlier decisions, conventions and preferences before it acts, saves new ones, and corrects stale ones. It also finds the apps your organization uses on CoreSpeed: when a task needs one that is not connected, Codex hands you a link to connect it and waits until it is ready. The tools of connected apps are called through the bundled cs CLI skill (cs mcp search, cs mcp get, cs mcp call), and files move in and out of the organization's Drive with cs drive, so Codex loads a small, fixed tool list whatever your organization has connected. A person in your organization can be asked to approve a write before it runs.",
     "developerName": "CoreSpeed",
     "category": "Developer Tools",
     "capabilities": [
