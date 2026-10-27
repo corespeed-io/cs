@@ -91,7 +91,7 @@
               "prompt": "Delete everything you remember about me."
             },
             {
-              "description": "App action outside the plugin. The plugin carries shared memory, not app tools, so it calls no tool, claims no success, and says it cannot post from here.",
+              "description": "App action with no connected app. The review account's organization has no apps connected, and the plugin's MCP server carries shared memory, not app tools, so the plugin calls no tool, claims no success, and says Slack is not connected for this account. (Outside review, a user whose organization has connected Slack can reach it from a terminal through the bundled cs-cli skill; that path needs the cs CLI and a connected app, and neither exists in the review account.)",
               "prompt": "Post this message to our team's Slack channel."
             }
           ]
