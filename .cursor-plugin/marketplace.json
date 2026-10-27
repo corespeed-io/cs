@@ -11,7 +11,7 @@
     {
       "name": "corespeed",
       "source": "./plugins/corespeed",
-      "description": "Long-term memory shared across your agents through one MCP server with browser sign-in, the tools of your connected apps and the files in your organization's Drive through the cs CLI, plus skills for the CLI and the HTTP API."
+      "description": "Long-term memory shared across your agents and connector discovery through one MCP server with browser sign-in, the tools of your connected apps and the files in your organization's Drive through the cs CLI, plus skills for the CLI and the HTTP API."
     }
   ]
 }

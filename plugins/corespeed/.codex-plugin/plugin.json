@@ -1,7 +1,7 @@
 {
   "name": "corespeed",
   "version": "0.3.2",
-  "description": "Connect Codex to CoreSpeed: long-term memory shared across your agents through one MCP server, the tools of your connected apps and the files in your organization's Drive through the cs CLI, plus skills for the CLI and the HTTP API.",
+  "description": "Connect Codex to CoreSpeed: long-term memory shared across your agents and connector discovery through one MCP server, the tools of your connected apps and the files in your organization's Drive through the cs CLI, plus skills for the CLI and the HTTP API.",
   "author": {
     "name": "CoreSpeed",
     "email": "contact@corespeed.io",
@@ -24,7 +24,7 @@
   "interface": {
     "displayName": "CoreSpeed",
     "shortDescription": "Shared memory for your agents",
-    "longDescription": "Connect Codex to CoreSpeed with a browser sign-in. The plugin's MCP server carries long-term memory shared across your organization's agents: Codex looks up earlier decisions, conventions and preferences before it acts, saves new ones, and corrects stale ones. The tools of your organization's connected apps are called through the bundled cs CLI skill (cs mcp search, cs mcp get, cs mcp call), and files move in and out of the organization's Drive with cs drive, so Codex loads a small, fixed tool list whatever your organization has connected. Every call is metered on one wallet with spend caps and an audit trail, and a human can be asked to approve a write first.",
+    "longDescription": "Connect Codex to CoreSpeed with a browser sign-in. The plugin's MCP server carries long-term memory shared across your organization's agents: Codex looks up earlier decisions, conventions and preferences before it acts, saves new ones, and corrects stale ones. It also finds the apps your organization uses on CoreSpeed: when a task needs one that is not connected, Codex hands you a link to connect it and waits until it is ready. The tools of connected apps are called through the bundled cs CLI skill (cs mcp search, cs mcp get, cs mcp call), and files move in and out of the organization's Drive with cs drive, so Codex loads a small, fixed tool list whatever your organization has connected. Every call is metered on one wallet with spend caps and an audit trail, and a human can be asked to approve a write first.",
     "developerName": "CoreSpeed",
     "category": "Developer Tools",
     "capabilities": [
@@ -37,8 +37,8 @@
     "privacyPolicyURL": "https://corespeed.io/privacy",
     "defaultPrompt": [
       "Search my CoreSpeed memory for context on this repository before we start.",
-      "Remember that this project deploys from the release branch on Fridays.",
-      "Use the cs CLI to find the CoreSpeed tool for this task, show its schema, then call it."
+      "Is Notion connected to my CoreSpeed account? If not, give me a link to connect it.",
+      "Remember that this project deploys from the release branch on Fridays."
     ],
     "brandColor": "#C2410C",
     "composerIcon": "./assets/app-icon.svg",
@@ -75,10 +75,10 @@
               "expected_behavior": "Finds the seeded memory that names Priya and updates it to Raj with memory__update, rather than saving a second, conflicting memory."
             },
             {
-              "description": "API setup: the bundled cs-api skill guides code that calls CoreSpeed over HTTP.",
-              "prompt": "Set up this Python service to search CoreSpeed memory over HTTP with an API key.",
-              "tools_triggered": "None: the bundled cs-api skill handles it",
-              "expected_behavior": "Writes code that sends POST https://api.corespeed.io/mcp with both Accept values, reads the key from an environment variable instead of hard-coding it, and checks result.isError."
+              "description": "Connect an app: find it, report that it is not connected, and hand the user a connect link.",
+              "prompt": "Is Notion connected to my CoreSpeed account? If not, give me a link to connect it.",
+              "tools_triggered": "manage__connectors_search, manage__connectors_connect",
+              "expected_behavior": "Calls manage__connectors_search, reports Notion as not connected, then calls manage__connectors_connect and gives the user the link it returns, without claiming Notion is connected or that it can act in Notion here."
             }
           ],
           "negative": [
@@ -91,8 +91,8 @@
               "prompt": "Delete everything you remember about me."
             },
             {
-              "description": "App action with no connected app. The review account's organization has no apps connected, and the plugin's MCP server carries shared memory, not app tools, so the plugin calls no tool, claims no success, and says Slack is not connected for this account. (Outside review, a user whose organization has connected Slack can reach it from a terminal through the bundled cs-cli skill; that path needs the cs CLI and a connected app, and neither exists in the review account.)",
-              "prompt": "Post this message to our team's Slack channel."
+              "description": "Out of scope. Booking travel is not something CoreSpeed memory or app connection does, so the plugin calls no tool and claims no booking.",
+              "prompt": "Book me a flight to Tokyo next Friday."
             }
           ]
         },

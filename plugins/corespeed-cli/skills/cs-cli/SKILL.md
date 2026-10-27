@@ -12,7 +12,7 @@ has no runtime dependencies.
 If your client has the full CoreSpeed MCP server
 (`https://api.corespeed.io/mcp`), call its tools directly. The Codex and
 Cursor plugins' server (`https://api.corespeed.io/mcp/plugin/chatgpt`) carries
-memory only, so there a connected app's tools and the
+memory and connector discovery only, so there a connected app's tools and the
 Drive are reached with `cs`. Use `cs` as well when there is no MCP server, when
 a client cannot load a large tool list, when a human is at a terminal, or when
 a CI job needs an API key.

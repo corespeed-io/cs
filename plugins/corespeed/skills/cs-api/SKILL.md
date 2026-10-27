@@ -10,7 +10,7 @@ that carries the tools of the apps an organization has connected, long-term
 memory, media generation and understanding, live web search, and public social
 data. An agent with this plugin installed already has it — or, in Codex and
 Cursor, the plugin surface `https://api.corespeed.io/mcp/plugin/chatgpt`
-(memory), which takes the same credentials — as an MCP server; this
+(memory and connector discovery), which takes the same credentials — as an MCP server; this
 skill is for code that talks to it directly: a service, a CI job, a script, or
 a client without OAuth.
 
