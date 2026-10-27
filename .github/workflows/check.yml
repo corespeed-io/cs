@@ -35,7 +35,7 @@ jobs:
       - name: Codex and the Directory get the plugin surface; Claude Code the full server
         # The OpenAI Plugins Directory accepts mcpServers only as the root
         # ./.mcp.json, so that file is the fixed plugin surface
-        # /mcp/plugin/chatgpt (memory, connector discovery), which no
+        # /mcp/plugin/chatgpt (shared memory), which no
         # organization's connector count can push past Codex's catalog limit.
         # Claude Code loads .mcp.json first and then the file its manifest
         # names; the later `corespeed` entry replaces the earlier one, so it
