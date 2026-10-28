@@ -1,6 +1,6 @@
 {
   "name": "corespeed",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Connect Codex to CoreSpeed: long-term memory shared across your agents and connector discovery through one MCP server, the tools of your connected apps and the files in your organization's Drive through the cs CLI, plus skills for the CLI and the HTTP API.",
   "author": {
     "name": "CoreSpeed",
