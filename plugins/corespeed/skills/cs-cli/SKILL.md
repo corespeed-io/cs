@@ -6,8 +6,10 @@ description: Use when a task needs the CoreSpeed CLI (cs, npm package @corespeed
 # CoreSpeed CLI (`cs`)
 
 `cs` runs every command against the same CoreSpeed MCP server your agents use,
-under a member session stored on this machine. It needs Node.js 20 or Bun and
-has no runtime dependencies.
+under a member session stored on this machine. npm installs a native `cs` for
+macOS, Linux and Windows, and a small launcher starts it, so npm and npx need
+Node.js 20 or Bun. Do not install it with `--omit=optional`: that leaves the
+native `cs` out.
 
 If your client has the full CoreSpeed MCP server
 (`https://api.corespeed.io/mcp`), call its tools directly. The Codex and
