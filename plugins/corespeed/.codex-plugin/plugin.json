@@ -1,6 +1,6 @@
 {
   "name": "corespeed",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Connect Codex to CoreSpeed: long-term memory shared across your agents and connector discovery through one MCP server, the tools of your connected apps and the files in your organization's Drive through the cs CLI, plus skills for the CLI and the HTTP API.",
   "author": {
     "name": "CoreSpeed",
@@ -70,9 +70,9 @@
             },
             {
               "description": "Correct: update a stale memory instead of saving a conflicting one.",
-              "prompt": "The Acme launch owner is now Raj, not Priya.",
+              "prompt": "The Acme launch owner is now Mark, not Sam.",
               "tools_triggered": "memory__search, memory__update",
-              "expected_behavior": "Finds the seeded memory that names Priya and updates it to Raj with memory__update, rather than saving a second, conflicting memory."
+              "expected_behavior": "Finds the seeded memory that names Sam and updates it to Mark with memory__update, rather than saving a second, conflicting memory."
             },
             {
               "description": "Connect an app: find it, report that it is not connected, and hand the user a connect link.",
