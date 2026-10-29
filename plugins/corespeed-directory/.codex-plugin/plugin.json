@@ -1,0 +1,104 @@
+{
+  "name": "corespeed",
+  "version": "0.4.0",
+  "description": "Recall, save, correct and organize CoreSpeed memories across sessions, with browser sign-in and organization-controlled write approvals.",
+  "author": {
+    "name": "CoreSpeed",
+    "email": "contact@corespeed.io",
+    "url": "https://corespeed.io"
+  },
+  "homepage": "https://corespeed.io/docs",
+  "repository": "https://github.com/corespeed-io/cs",
+  "license": "Apache-2.0",
+  "keywords": [
+    "corespeed",
+    "memory",
+    "agents",
+    "preferences"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "CoreSpeed",
+    "shortDescription": "Shared memory for your agents",
+    "longDescription": "Keep facts, decisions and preferences in CoreSpeed across sessions. Search or read saved memories, save a fact you ask to remember, correct an identified entry, organize memory links, or delete entries you select. New memories are private unless you ask to share them with your organization. See which user and organization are active. Your organization can require a human to approve a memory write before it runs. The bundled skill guides these memory workflows. This plugin does not operate connected apps or files and requires no command-line installation.",
+    "developerName": "CoreSpeed",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://corespeed.io",
+    "supportURL": "https://corespeed.io/contact",
+    "privacyPolicyURL": "https://corespeed.io/privacy",
+    "defaultPrompt": [
+      "What do my CoreSpeed memories say about our release process?",
+      "Remember that this project deploys from the release branch on Fridays.",
+      "Show my saved CoreSpeed memories so I can choose any that need updating."
+    ],
+    "brandColor": "#C2410C",
+    "composerIcon": "./assets/app-icon.svg",
+    "logo": "./assets/app-icon.svg",
+    "termsOfServiceURL": "https://corespeed.io/terms"
+  },
+  "extensions": {
+    "com.openai": {
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Identity: name the signed-in user and organization.",
+              "prompt": "Which CoreSpeed organization am I using?",
+              "tools_triggered": "manage__whoami",
+              "expected_behavior": "Calls manage__whoami and names the signed-in user and the CoreSpeed organization it returns."
+            },
+            {
+              "description": "Remember: save a new fact the user states.",
+              "prompt": "Remember that our staging deploys freeze on Fridays.",
+              "tools_triggered": "memory__remember",
+              "expected_behavior": "Calls memory__remember with the fact and confirms it was saved, without adding details the user did not give."
+            },
+            {
+              "description": "Recall: answer from a memory saved earlier in the test account.",
+              "prompt": "How do we name release branches?",
+              "tools_triggered": "memory__search",
+              "expected_behavior": "Calls memory__search and answers from the seeded memory: release branches are named release/YYYY-MM-DD."
+            },
+            {
+              "description": "Correct: update a stale memory instead of saving a conflicting one.",
+              "prompt": "The Acme launch owner is now Mark, not Sam.",
+              "tools_triggered": "memory__search, memory__update",
+              "expected_behavior": "Finds the seeded memory that names Sam and updates it to Mark with memory__update, rather than saving a second, conflicting memory."
+            },
+            {
+              "description": "Inspect memory: list entries saved by the reviewer account.",
+              "prompt": "Show my saved CoreSpeed memories so I can review them.",
+              "tools_triggered": "memory__list",
+              "expected_behavior": "Calls memory__list and shows the seeded release-branch convention and Acme launch-owner fact. Uses returned pagination when needed and does not claim the first page is the complete set or change any entry."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Arithmetic needs no CoreSpeed data or action. Answer directly without invoking the plugin.",
+              "prompt": "What is 12 times 7?"
+            },
+            {
+              "description": "Creative writing with no saved context needs no memory lookup or write. Do not invoke the plugin.",
+              "prompt": "Write a four-line poem about autumn leaves."
+            },
+            {
+              "description": "A weather request does not need CoreSpeed memory. The plugin exposes no weather tool; do not invoke it or claim a forecast from it.",
+              "prompt": "What is the weather in Tokyo today?"
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "CoreSpeed does not sell products or process payments inside ChatGPT or Codex."
+      },
+      "publication": {
+        "release_notes": "Memory workflows through eleven individually exposed operations and a dedicated memory skill. The package contains no generic CLI or HTTP executor. Standalone CLI installation remains a separate user choice."
+      }
+    }
+  }
+}

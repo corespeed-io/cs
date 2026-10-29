@@ -20,6 +20,7 @@ jobs:
           for f in .agents/plugins/marketplace.json .claude-plugin/marketplace.json .cursor-plugin/marketplace.json \
             plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed/.claude-plugin/plugin.json \
             plugins/corespeed/.cursor-plugin/plugin.json \
+            plugins/corespeed-directory/.codex-plugin/plugin.json plugins/corespeed-directory/.mcp.json \
             plugins/corespeed/.mcp.json plugins/corespeed/.mcp.claude.json plugins/corespeed-cli/.codex-plugin/plugin.json; do
             jq empty "$f" || { echo "::error file=$f::invalid JSON"; exit 1; }
           done
@@ -32,11 +33,9 @@ jobs:
             || { echo "::error file=plugins/corespeed/.mcp.json::expected exactly {type, url}"; exit 1; }
           jq -e '.mcpServers | length == 1 and (.corespeed | keys == ["type", "url"])' plugins/corespeed/.mcp.claude.json > /dev/null \
             || { echo "::error file=plugins/corespeed/.mcp.claude.json::expected exactly {type, url}"; exit 1; }
-      - name: Codex and the Directory get the plugin surface; Claude Code the full server
-        # The OpenAI Plugins Directory accepts mcpServers only as the root
-        # ./.mcp.json, so that file is the fixed plugin surface
-        # /mcp/plugin/chatgpt (memory, connector discovery), which no
-        # organization's connector count can push past Codex's catalog limit.
+      - name: Legacy package keeps its endpoints; Claude Code gets the full server
+        # The Directory package is checked separately. Keep the earlier
+        # package's endpoints for Cursor and existing local installations.
         # Claude Code loads .mcp.json first and then the file its manifest
         # names; the later `corespeed` entry replaces the earlier one, so it
         # gets the full /mcp from .mcp.claude.json.
@@ -49,6 +48,8 @@ jobs:
             || { echo "::error file=plugins/corespeed/.claude-plugin/plugin.json::mcpServers must be ./.mcp.claude.json"; exit 1; }
           [ "$(jq -r .mcpServers.corespeed.url plugins/corespeed/.mcp.claude.json)" = "https://api.corespeed.io/mcp" ] \
             || { echo "::error file=plugins/corespeed/.mcp.claude.json::must point at https://api.corespeed.io/mcp"; exit 1; }
+      - name: Directory package is self-contained and memory only
+        run: python3 scripts/check-directory.py
       - name: The CLI plugin is skills-only and bundles the same cs-cli skill
         # corespeed-cli registers no MCP server: that is the point of it (a
         # client loads no tool list). Its cs-cli skill is a copy of the MCP
@@ -66,7 +67,7 @@ jobs:
         # (plugin_default_prompt_too_many); the limit is checked here, not
         # at submission time.
         run: |
-          for f in plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed-cli/.codex-plugin/plugin.json; do
+          for f in plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed-cli/.codex-plugin/plugin.json plugins/corespeed-directory/.codex-plugin/plugin.json; do
             jq -e '(.interface.defaultPrompt // []) | (type == "string") or (length <= 3 and all(type == "string" and length > 0))' "$f" > /dev/null \
               || { echo "::error file=$f::interface.defaultPrompt must be at most three non-empty strings"; exit 1; }
           done
@@ -76,7 +77,7 @@ jobs:
         # 240 package validation allows; held here so a manifest never passes
         # review and fails at submission.
         run: |
-          for f in plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed-cli/.codex-plugin/plugin.json; do
+          for f in plugins/corespeed/.codex-plugin/plugin.json plugins/corespeed-cli/.codex-plugin/plugin.json plugins/corespeed-directory/.codex-plugin/plugin.json; do
             jq -e '.interface.shortDescription | type == "string" and length > 0 and length <= 30' "$f" > /dev/null \
               || { echo "::error file=$f::interface.shortDescription must be 1–30 characters for Directory submission"; exit 1; }
           done
