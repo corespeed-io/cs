@@ -48,6 +48,8 @@ upload; contact OpenAI support to migrate the existing listing first. See the
 
 Claude Code keeps the full server and the existing CLI/API skills in
 `plugins/corespeed/`. Cursor keeps that package's earlier fixed endpoint.
+The legacy Codex manifest in that folder is retained for existing by-path
+installations; the Codex marketplace selects the Directory package instead.
 
 ## Codex, CLI only
 

@@ -10,6 +10,7 @@ EXPECTED = {
     ".codex-plugin/plugin.json",
     ".mcp.json",
     "LICENSE",
+    "NOTICE",
     "SECURITY.md",
     "assets/app-icon.svg",
     "skills/corespeed-memory/SKILL.md",
@@ -51,8 +52,12 @@ require(sources["corespeed-cli"] == "./plugins/corespeed-cli", "Keep standalone 
 
 review = manifest["extensions"]["com.openai"]["review"]["test_cases"]
 require(len(review["positive"]) == 5 and len(review["negative"]) == 3, "Expected five positive and three negative cases")
-for field in ("defaultPrompt",):
-    prompts = manifest["interface"][field]
-    require(len(prompts) <= 3 and all(isinstance(p, str) and p for p in prompts), "Expected at most three nonempty prompts")
+prompts = manifest["interface"]["defaultPrompt"]
+if isinstance(prompts, str):
+    prompts = [prompts]
+require(
+    isinstance(prompts, list) and len(prompts) <= 3 and all(isinstance(p, str) and p for p in prompts),
+    "Expected a nonempty prompt string or at most three nonempty prompts",
+)
 require(0 < len(manifest["interface"]["shortDescription"]) <= 30, "Directory subtitle exceeds 30 characters")
 print("Directory package: self-contained memory skill, fixed OAuth endpoint; standalone CLI retained")
