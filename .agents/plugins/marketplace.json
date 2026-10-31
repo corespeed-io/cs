@@ -8,7 +8,7 @@
       "name": "corespeed",
       "source": {
         "source": "local",
-        "path": "./plugins/corespeed"
+        "path": "./plugins/corespeed-directory"
       },
       "policy": {
         "installation": "AVAILABLE",

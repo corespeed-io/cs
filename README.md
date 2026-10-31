@@ -34,16 +34,21 @@ select **Authenticate** (or open **Settings → MCP servers → CoreSpeed**) and
 finish the sign-in in the browser. In the ChatGPT desktop app the plugin
 appears under the **CoreSpeed** marketplace once it has been added.
 
-In Codex the plugin's server (the root `.mcp.json`, the one file the OpenAI
-Plugins Directory accepts) is `https://api.corespeed.io/mcp/plugin/chatgpt`: a
-fixed, small tool list — shared memory and connector discovery — that no
-organization's connector count can push past Codex's catalog limit. Claude Code
-gets the full `https://api.corespeed.io/mcp` from `.mcp.claude.json`, which its
-manifest declares and which replaces the root entry by name. The agent
-finds an app with `manage__connectors_search`, hands you a link to connect it,
-calls a connected app's tools through the bundled `cs-cli` skill
-(`cs mcp search`, `cs mcp get`, `cs mcp call`), and moves files in and out
-of the organization's Drive with `cs drive`.
+Codex installs the self-contained `plugins/corespeed-directory/` package.
+It uses `https://api.corespeed.io/mcp/plugin/chatgpt`: nine memory
+operations, current identity and completion of memory write approvals. Its
+`corespeed-memory` skill guides recall, saving, correction, memory links and
+deletion. New memories are private unless you ask to share them. This is the
+package prepared for OpenAI Directory review; it contains no general CLI or
+HTTP API skill and does not operate connected apps or files. It requires the
+narrowed memory contract to be deployed before installation or submission.
+It keeps the same MCP URL already configured for the plugin; there is no
+server-address migration.
+
+Claude Code keeps the full server and the CLI/API skills in
+`plugins/corespeed/`. Cursor uses that package with the same memory-only
+plugin endpoint, plus the broader CLI/API skills. Codex has one manifest,
+in `plugins/corespeed-directory/`.
 
 ## Codex, CLI only
 
@@ -57,8 +62,9 @@ the `cs` command-line tool, sign in once in the browser, and then find and call
 CoreSpeed tools from the shell (`cs mcp search`, `cs mcp get`, `cs mcp call`),
 and move files in and out of the organization's Drive (`cs drive put`,
 `cs drive get`). Pick it when Codex cannot load your organization's full tool
-list, or when you want every call to go through the shell. It is the plugin
-meant for the OpenAI Plugins Directory.
+list, or when you want every call to go through the shell. It remains
+available separately from the repository marketplace. It is not part of the
+Directory memory package, and its availability here is not an OpenAI approval.
 
 ## Cursor and Grok Bot
 
@@ -67,10 +73,9 @@ install it. Pick the CoreSpeed MCP server and sign in in the browser when
 Cursor asks. Grok Bot loads plugins from the Cursor Marketplace, so the same
 plugin works there.
 
-Cursor reads the same root `.mcp.json` as Codex, so its server is the plugin
-surface `https://api.corespeed.io/mcp/plugin/chatgpt`: shared memory and
-connector discovery, a list no organization's connector count can grow past
-what Cursor loads. A connected app's tools and the organization's Drive are
+Cursor reads the legacy package's root `.mcp.json`, so its server is the plugin
+surface `https://api.corespeed.io/mcp/plugin/chatgpt`: the same eleven
+memory, identity and approval operations as the Directory package. A connected app's tools and the organization's Drive are
 reached through the bundled `cs-cli` skill (`cs mcp call`, `cs drive`).
 
 To try this repository before a Marketplace release, copy `plugins/corespeed`
@@ -91,10 +96,22 @@ organizations, connects apps, and calls tools from a terminal. See the
 
 | Plugin | Part | What it does |
 | --- | --- | --- |
-| `corespeed` | MCP server | Browser sign-in (OAuth 2.1 + PKCE), never a pasted key. Claude Code: the full `https://api.corespeed.io/mcp`. Codex and Cursor: the plugin surface `https://api.corespeed.io/mcp/plugin/chatgpt` (memory, connector discovery). |
-| `corespeed` | `cs-cli` skill | Using the `cs` CLI: sign-in, finding and calling tools from a shell, memory, files in the Drive, API keys, organizations, connectors, remote MCP servers, credit. |
-| `corespeed` | `cs-api` skill | Calling CoreSpeed over HTTP from code and CI: credentials, `tools/list` and `tools/call`, error codes, credits. |
+| Codex `corespeed` (`plugins/corespeed-directory/`) | MCP and `corespeed-memory` skill | Eleven individually exposed memory, identity and approval operations; no app connections, files or generic executor. |
+| Claude/Cursor `corespeed` (`plugins/corespeed/`) | MCP server | Browser sign-in (OAuth 2.1 + PKCE), never a pasted key. Claude Code: the full `https://api.corespeed.io/mcp`. Cursor: the plugin surface `https://api.corespeed.io/mcp/plugin/chatgpt` (memory, identity and approvals). |
+| Claude/Cursor `corespeed` | `cs-cli` skill | Using the `cs` CLI: sign-in, finding and calling tools from a shell, memory, files in the Drive, API keys, organizations, connectors, remote MCP servers, credit. |
+| Claude/Cursor `corespeed` | `cs-api` skill | Calling CoreSpeed over HTTP from code and CI: credentials, `tools/list` and `tools/call`, error codes, credits. |
 | `corespeed-cli` | `cs-cli` skill | The same skill, and nothing else: no MCP server is registered. |
+
+The public Directory upload is **only `plugins/corespeed-directory/`**, with
+the manifest at its root under `.codex-plugin/`. Do not upload this entire
+repository or the legacy `plugins/corespeed/` package. Run
+`python3 scripts/check-directory.py` before packaging. CI checks the exact
+file inventory so a broader skill cannot enter the upload accidentally.
+
+Standalone CLI installation remains your choice, using npm or the separate
+`corespeed-cli` plugin above. The memory plugin neither requires nor installs
+it and does not use it to complete an unavailable or denied operation. CLI
+sign-in is separate; plugin credentials are not copied.
 
 If you added CoreSpeed to your client by hand earlier (`claude mcp add`,
 `codex mcp add`, or an entry in Cursor's `mcp.json`), remove that entry
