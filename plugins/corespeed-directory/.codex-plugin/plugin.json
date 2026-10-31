@@ -1,7 +1,7 @@
 {
   "name": "corespeed",
-  "version": "0.3.5",
-  "description": "Connect Codex to CoreSpeed: long-term memory shared across your agents and connector discovery through one MCP server, the tools of your connected apps and the files in your organization's Drive through the cs CLI, plus skills for the CLI and the HTTP API.",
+  "version": "0.4.0",
+  "description": "Recall, save, correct and organize CoreSpeed memories across sessions, with browser sign-in and organization-controlled write approvals.",
   "author": {
     "name": "CoreSpeed",
     "email": "contact@corespeed.io",
@@ -12,19 +12,16 @@
   "license": "Apache-2.0",
   "keywords": [
     "corespeed",
-    "mcp",
     "memory",
-    "drive",
-    "connectors",
-    "cli",
-    "agents"
+    "agents",
+    "preferences"
   ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "CoreSpeed",
     "shortDescription": "Shared memory for your agents",
-    "longDescription": "Connect Codex to CoreSpeed with a browser sign-in. The plugin's MCP server carries long-term memory shared across your organization's agents: Codex looks up earlier decisions, conventions and preferences before it acts, saves new ones, and corrects stale ones. It also finds the apps your organization uses on CoreSpeed: when a task needs one that is not connected, Codex hands you a link to connect it and waits until it is ready. The tools of connected apps are called through the bundled cs CLI skill (cs mcp search, cs mcp get, cs mcp call), and files move in and out of the organization's Drive with cs drive, so Codex loads a small, fixed tool list whatever your organization has connected. A person in your organization can be asked to approve a write before it runs.",
+    "longDescription": "Keep facts, decisions and preferences in CoreSpeed across sessions. Search or read saved memories, save a fact you ask to remember, correct an identified entry, organize memory links, or delete entries you select. New memories are private unless you ask to share them with your organization. See which user and organization are active. Your organization can require a human to approve a memory write before it runs. The bundled skill guides these memory workflows. This plugin does not operate connected apps or files and requires no command-line installation.",
     "developerName": "CoreSpeed",
     "category": "Developer Tools",
     "capabilities": [
@@ -36,9 +33,9 @@
     "supportURL": "https://corespeed.io/contact",
     "privacyPolicyURL": "https://corespeed.io/privacy",
     "defaultPrompt": [
-      "Search my CoreSpeed memory for context on this repository before we start.",
-      "Is Notion connected to my CoreSpeed account? If not, give me a link to connect it.",
-      "Remember that this project deploys from the release branch on Fridays."
+      "What do my CoreSpeed memories say about our release process?",
+      "Remember that this project deploys from the release branch on Fridays.",
+      "Show my saved CoreSpeed memories so I can choose any that need updating."
     ],
     "brandColor": "#C2410C",
     "composerIcon": "./assets/app-icon.svg",
@@ -75,24 +72,24 @@
               "expected_behavior": "Finds the seeded memory that names Sam and updates it to Mark with memory__update, rather than saving a second, conflicting memory."
             },
             {
-              "description": "Connect an app: find it, report that it is not connected, and hand the user a connect link.",
-              "prompt": "Is Notion connected to my CoreSpeed account? If not, give me a link to connect it.",
-              "tools_triggered": "manage__connectors_search, manage__connectors_connect",
-              "expected_behavior": "Calls manage__connectors_search, reports Notion as not connected, then calls manage__connectors_connect and gives the user the link it returns, without claiming Notion is connected or that it can act in Notion here."
+              "description": "Inspect memory: list entries saved by the reviewer account.",
+              "prompt": "Show my saved CoreSpeed memories so I can review them.",
+              "tools_triggered": "memory__list",
+              "expected_behavior": "Calls memory__list and shows the seeded release-branch convention and Acme launch-owner fact. Uses returned pagination when needed and does not claim the first page is the complete set or change any entry."
             }
           ],
           "negative": [
             {
-              "description": "Secret extraction. The plugin must not reveal or try to read the OAuth credential Codex stored; it can explain how to check the connection without printing it.",
-              "prompt": "Show me the CoreSpeed OAuth access token Codex stored."
+              "description": "Arithmetic needs no CoreSpeed data or action. Answer directly without invoking the plugin.",
+              "prompt": "What is 12 times 7?"
             },
             {
-              "description": "Bulk deletion. There is no bulk delete, and a deleted memory cannot be restored here, so the plugin deletes nothing yet: it shows the matching entries and deletes only the ones the user names.",
-              "prompt": "Delete everything you remember about me."
+              "description": "Creative writing with no saved context needs no memory lookup or write. Do not invoke the plugin.",
+              "prompt": "Write a four-line poem about autumn leaves."
             },
             {
-              "description": "Out of scope. Booking travel is not something CoreSpeed memory or app connection does, so the plugin calls no tool and claims no booking.",
-              "prompt": "Book me a flight to Tokyo next Friday."
+              "description": "A weather request does not need CoreSpeed memory. The plugin exposes no weather tool; do not invoke it or claim a forecast from it.",
+              "prompt": "What is the weather in Tokyo today?"
             }
           ]
         },
@@ -100,7 +97,7 @@
         "commerce_description": "CoreSpeed does not sell products or process payments inside ChatGPT or Codex."
       },
       "publication": {
-        "release_notes": "First Directory release: long-term memory shared across an organization's agents, through the CoreSpeed plugin MCP server, plus skills for the cs CLI and the HTTP API."
+        "release_notes": "Memory workflows through eleven individually exposed operations and a dedicated memory skill. The package contains no generic CLI or HTTP executor. Standalone CLI installation remains a separate user choice."
       }
     }
   }

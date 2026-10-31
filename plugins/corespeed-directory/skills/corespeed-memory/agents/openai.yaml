@@ -1,0 +1,11 @@
+interface:
+  display_name: "CoreSpeed Memory"
+  short_description: "Recall and manage your CoreSpeed memories"
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "corespeed"
+      description: "CoreSpeed memory, identity and memory write approvals"
+      transport: "streamable_http"
+      url: "https://api.corespeed.io/mcp/plugin/chatgpt"
