@@ -41,7 +41,7 @@ server = json.loads((PACKAGE / ".mcp.json").read_text())
 require(
     server == {"mcpServers": {"corespeed": {
         "type": "http",
-        "url": "https://api.corespeed.io/mcp/plugin/chatgpt-memory",
+        "url": "https://api.corespeed.io/mcp/plugin/chatgpt",
     }}},
     "The Directory package must use the memory-only OAuth server without credentials",
 )

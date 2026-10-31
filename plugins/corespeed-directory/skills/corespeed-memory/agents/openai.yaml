@@ -8,4 +8,4 @@ dependencies:
       value: "corespeed"
       description: "CoreSpeed memory, identity and memory write approvals"
       transport: "streamable_http"
-      url: "https://api.corespeed.io/mcp/plugin/chatgpt-memory"
+      url: "https://api.corespeed.io/mcp/plugin/chatgpt"

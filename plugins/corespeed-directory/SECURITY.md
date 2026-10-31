@@ -10,6 +10,6 @@ it.
 ## What this package ships
 
 The plugin is configuration and Markdown. It registers one MCP server,
-`https://api.corespeed.io/mcp/plugin/chatgpt-memory`, and authenticates it with the client's own
+`https://api.corespeed.io/mcp/plugin/chatgpt`, and authenticates it with the client's own
 OAuth sign-in against `login.corespeed.io`. It contains no executable code, no
 hooks, and no credentials, and it never asks for an API key.
