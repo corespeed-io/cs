@@ -6,6 +6,6 @@ dependencies:
   tools:
     - type: "mcp"
       value: "corespeed"
-      description: "CoreSpeed memory, identity and memory write approvals"
+      description: "CoreSpeed memory, Drive files, identity and write approvals"
       transport: "streamable_http"
       url: "https://api.corespeed.io/mcp/plugin/chatgpt"

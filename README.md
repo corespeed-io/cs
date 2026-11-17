@@ -38,16 +38,19 @@ Codex installs the self-contained `plugins/corespeed-directory/` package.
 It uses `https://api.corespeed.io/mcp/plugin/chatgpt`: nine memory
 operations, current identity and completion of memory write approvals. Its
 `corespeed-memory` skill guides recall, saving, correction, memory links and
-deletion. New memories are private unless you ask to share them. This is the
+deletion; the `corespeed-drive` skill guides listing, reading, storing,
+moving, sharing and deleting files in the organization's Drive. New memories
+and files go to your own space unless you ask to share them. This is the
 package prepared for OpenAI Directory review; it contains no general CLI or
-HTTP API skill and does not operate connected apps or files. It requires the
-narrowed memory contract to be deployed before installation or submission.
+HTTP API skill, does not operate connected apps and cannot upload local files.
+It requires the plugin endpoint's memory and Drive contract to be deployed
+before installation or submission.
 It keeps the same MCP URL already configured for the plugin; there is no
 server-address migration.
 
 Claude Code keeps the full server and the CLI/API skills in
-`plugins/corespeed/`. Cursor uses that package with the same memory-only
-plugin endpoint, plus the broader CLI/API skills. Codex has one manifest,
+`plugins/corespeed/`. Cursor uses that package with the same plugin
+endpoint, plus the broader CLI/API skills. Codex has one manifest,
 in `plugins/corespeed-directory/`.
 
 ## Codex, CLI only
@@ -74,9 +77,10 @@ Cursor asks. Grok Bot loads plugins from the Cursor Marketplace, so the same
 plugin works there.
 
 Cursor reads the legacy package's root `.mcp.json`, so its server is the plugin
-surface `https://api.corespeed.io/mcp/plugin/chatgpt`: the same eleven
-memory, identity and approval operations as the Directory package. A connected app's tools and the organization's Drive are
-reached through the bundled `cs-cli` skill (`cs mcp call`, `cs drive`).
+surface `https://api.corespeed.io/mcp/plugin/chatgpt`: the same eighteen
+memory, Drive, identity and approval operations as the Directory package. A
+connected app's tools and uploads of local files are reached through the
+bundled `cs-cli` skill (`cs mcp call`, `cs drive put`).
 
 To try this repository before a Marketplace release, copy `plugins/corespeed`
 to `~/.cursor/plugins/local/corespeed` and reload the window.
@@ -96,8 +100,8 @@ organizations, connects apps, and calls tools from a terminal. See the
 
 | Plugin | Part | What it does |
 | --- | --- | --- |
-| Codex `corespeed` (`plugins/corespeed-directory/`) | MCP and `corespeed-memory` skill | Eleven individually exposed memory, identity and approval operations; no app connections, files or generic executor. |
-| Claude/Cursor `corespeed` (`plugins/corespeed/`) | MCP server | Browser sign-in (OAuth 2.1 + PKCE), never a pasted key. Claude Code: the full `https://api.corespeed.io/mcp`. Cursor: the plugin surface `https://api.corespeed.io/mcp/plugin/chatgpt` (memory, identity and approvals). |
+| Codex `corespeed` (`plugins/corespeed-directory/`) | MCP, `corespeed-memory` and `corespeed-drive` skills | Eighteen individually exposed memory, Drive, identity and approval operations; no app connections, local uploads or generic executor. |
+| Claude/Cursor `corespeed` (`plugins/corespeed/`) | MCP server | Browser sign-in (OAuth 2.1 + PKCE), never a pasted key. Claude Code: the full `https://api.corespeed.io/mcp`. Cursor: the plugin surface `https://api.corespeed.io/mcp/plugin/chatgpt` (memory, Drive, identity and approvals). |
 | Claude/Cursor `corespeed` | `cs-cli` skill | Using the `cs` CLI: sign-in, finding and calling tools from a shell, memory, files in the Drive, API keys, organizations, connectors, remote MCP servers, credit. |
 | Claude/Cursor `corespeed` | `cs-api` skill | Calling CoreSpeed over HTTP from code and CI: credentials, `tools/list` and `tools/call`, error codes, credits. |
 | `corespeed-cli` | `cs-cli` skill | The same skill, and nothing else: no MCP server is registered. |
