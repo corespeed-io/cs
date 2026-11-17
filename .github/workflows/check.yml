@@ -46,7 +46,7 @@ jobs:
             || { echo "::error file=plugins/corespeed/.claude-plugin/plugin.json::mcpServers must be ./.mcp.claude.json"; exit 1; }
           [ "$(jq -r .mcpServers.corespeed.url plugins/corespeed/.mcp.claude.json)" = "https://api.corespeed.io/mcp" ] \
             || { echo "::error file=plugins/corespeed/.mcp.claude.json::must point at https://api.corespeed.io/mcp"; exit 1; }
-      - name: Directory package is self-contained and memory only
+      - name: Directory package is self-contained
         run: python3 scripts/check-directory.py
       - name: The CLI plugin is skills-only and bundles the same cs-cli skill
         # corespeed-cli registers no MCP server: that is the point of it (a

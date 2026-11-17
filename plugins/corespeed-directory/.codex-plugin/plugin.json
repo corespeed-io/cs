@@ -1,7 +1,7 @@
 {
   "name": "corespeed",
-  "version": "0.4.0",
-  "description": "Recall, save, correct and organize CoreSpeed memories across sessions, with browser sign-in and organization-controlled write approvals.",
+  "version": "0.5.0",
+  "description": "Recall, save and correct CoreSpeed memories, and read, store and share files in CoreSpeed Drive, with browser sign-in and organization-controlled write approvals.",
   "author": {
     "name": "CoreSpeed",
     "email": "contact@corespeed.io",
@@ -14,14 +14,16 @@
     "corespeed",
     "memory",
     "agents",
-    "preferences"
+    "preferences",
+    "files",
+    "drive"
   ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "CoreSpeed",
-    "shortDescription": "Shared memory for your agents",
-    "longDescription": "Keep facts, decisions and preferences in CoreSpeed across sessions. Search or read saved memories, save a fact you ask to remember, correct an identified entry, organize memory links, or delete entries you select. New memories are private unless you ask to share them with your organization. See which user and organization are active. Your organization can require a human to approve a memory write before it runs. The bundled skill guides these memory workflows. This plugin does not operate connected apps or files and requires no command-line installation.",
+    "shortDescription": "Shared memory and files",
+    "longDescription": "Keep facts, decisions, preferences and files in CoreSpeed across sessions and agents. Search or read saved memories, save a fact you ask to remember, correct an identified entry, organize memory links, or delete entries you select. List, read and store files in your organization's Drive, move or rename them, share a file you choose by a link, or delete files you select. New memories and files go to your own space unless you ask to share them with your organization. See which user and organization are active. Your organization can require a human to approve a write before it runs. The bundled skills guide these workflows. This plugin does not operate connected apps or upload files from your computer, and requires no command-line installation.",
     "developerName": "CoreSpeed",
     "category": "Developer Tools",
     "capabilities": [
@@ -35,7 +37,7 @@
     "defaultPrompt": [
       "What do my CoreSpeed memories say about our release process?",
       "Remember that this project deploys from the release branch on Fridays.",
-      "Show my saved CoreSpeed memories so I can choose any that need updating."
+      "Save these meeting notes to my CoreSpeed Drive as notes/standup.md."
     ],
     "brandColor": "#C2410C",
     "composerIcon": "./assets/app-icon.svg",
@@ -47,12 +49,6 @@
       "review": {
         "test_cases": {
           "positive": [
-            {
-              "description": "Identity: name the signed-in user and organization.",
-              "prompt": "Which CoreSpeed organization am I using?",
-              "tools_triggered": "manage__whoami",
-              "expected_behavior": "Calls manage__whoami and names the signed-in user and the CoreSpeed organization it returns."
-            },
             {
               "description": "Remember: save a new fact the user states.",
               "prompt": "Remember that our staging deploys freeze on Fridays.",
@@ -72,10 +68,16 @@
               "expected_behavior": "Finds the seeded memory that names Sam and updates it to Mark with memory__update, rather than saving a second, conflicting memory."
             },
             {
-              "description": "Inspect memory: list entries saved by the reviewer account.",
-              "prompt": "Show my saved CoreSpeed memories so I can review them.",
-              "tools_triggered": "memory__list",
-              "expected_behavior": "Calls memory__list and shows the seeded release-branch convention and Acme launch-owner fact. Uses returned pagination when needed and does not claim the first page is the complete set or change any entry."
+              "description": "Read a Drive file: answer from a file saved earlier in the test account.",
+              "prompt": "When is general availability in our Q4 launch plan in CoreSpeed Drive?",
+              "tools_triggered": "drive__list, drive__get",
+              "expected_behavior": "Finds plans/q4-launch.md with drive__list or reads it with drive__get, and answers November 3 from the file's text."
+            },
+            {
+              "description": "Store a Drive file: save text the user gives at the path they name.",
+              "prompt": "Save this to my CoreSpeed Drive as checklists/release.md: tag the build, run the smoke test, post the notes.",
+              "tools_triggered": "drive__put",
+              "expected_behavior": "Calls drive__put with the path checklists/release.md and the given text, then reports the returned path. Does not share the file."
             }
           ],
           "negative": [
@@ -88,7 +90,7 @@
               "prompt": "Write a four-line poem about autumn leaves."
             },
             {
-              "description": "A weather request does not need CoreSpeed memory. The plugin exposes no weather tool; do not invoke it or claim a forecast from it.",
+              "description": "A weather request does not need CoreSpeed memory or files. The plugin exposes no weather tool; do not invoke it or claim a forecast from it.",
               "prompt": "What is the weather in Tokyo today?"
             }
           ]
@@ -97,7 +99,7 @@
         "commerce_description": "CoreSpeed does not sell products or process payments inside ChatGPT or Codex."
       },
       "publication": {
-        "release_notes": "Memory workflows through eleven individually exposed operations and a dedicated memory skill. The package contains no generic CLI or HTTP executor. Standalone CLI installation remains a separate user choice."
+        "release_notes": "Adds CoreSpeed Drive: seven individually exposed file operations (list, get, put, move, share, delete, usage) and a dedicated Drive skill, beside the eleven memory, identity and approval operations. Files move only inside tool calls; there is no upload URL, storage credential, generic CLI or HTTP executor. Standalone CLI installation remains a separate user choice."
       }
     }
   }

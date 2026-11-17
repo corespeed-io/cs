@@ -1,6 +1,6 @@
 ---
 name: corespeed-memory
-description: Recall, save, correct, organize or delete facts and preferences in CoreSpeed memory when the user requests it or a question depends on earlier saved context. Also identify the signed-in CoreSpeed user and organization. Does not operate connected apps or files.
+description: Recall, save, correct, organize or delete facts and preferences in CoreSpeed memory when the user requests it or a question depends on earlier saved context. Also identify the signed-in CoreSpeed user and organization. Does not operate connected apps; files are the corespeed-drive skill's.
 ---
 
 # CoreSpeed memory
@@ -52,23 +52,27 @@ If a write returns an approval receipt, call `manage__approval_wait` with
 that returned approval id immediately. The write has not run yet: do not retry
 it or substitute another route. Report success only when the original write's
 result confirms it. Stop on denial or expiry. Only wait on receipts from this
-plugin's memory operations.
+plugin's own operations.
 
 ## Available operations and separate CLI installation
 
-This plugin exposes only the nine memory tools above, `manage__whoami` and
-`manage__approval_wait`. It does not connect or operate third-party apps,
-move files, manage keys, run shell commands or make purchases. If a required
+This plugin exposes the nine memory tools above, `manage__whoami`,
+`manage__approval_wait` and the Drive tools the `corespeed-drive` skill
+covers. It does not connect or operate third-party apps, manage keys, run
+shell commands or make purchases. If a required
 tool is unavailable, explain the limitation and stop that workflow. Do not
 discover extra operations, call another endpoint or load an external skill
 to finish it. Authentication stays in the client's browser sign-in flow;
 never request a credential in chat.
 
-The standalone CoreSpeed CLI is optional and independently installed. When
-the user explicitly asks about installing it, give the official installation
-documentation at https://corespeed.io/docs/cli and explain that it is a
-separate product with broader capabilities, outside this plugin's reviewed
-tools. The user remains free to choose that separate setup workflow under
-their client's permissions. Do not automatically install it, transfer this
+The standalone CoreSpeed CLI is optional and independently installed. It
+reaches CoreSpeed capabilities this plugin does not expose, such as the user's
+connected apps and uploads of local files. When the user asks for one of
+those, or asks about installing the CLI, say once that it is a separate
+CoreSpeed product, give the official installation documentation at
+https://corespeed.io/docs/cli, and explain that it is outside this plugin's
+reviewed tools. For a local file, first offer the routes the Drive tools
+have: paste the text, or give a public https URL. The user remains free to
+choose that separate setup workflow under their client's permissions. Do not automatically install it, transfer this
 plugin's credentials to it, or propose it as a way around a missing tool,
 denied approval or platform restriction. This plugin works without the CLI.

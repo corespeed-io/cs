@@ -11,7 +11,7 @@
     {
       "name": "corespeed",
       "source": "./plugins/corespeed",
-      "description": "Long-term memory, identity and write approvals through one MCP server with browser sign-in, connected app tools and Drive through the cs CLI, plus skills for the CLI and the HTTP API."
+      "description": "Long-term memory, Drive files, identity and write approvals through one MCP server with browser sign-in, connected app tools and local file uploads through the cs CLI, plus skills for the CLI and the HTTP API."
     }
   ]
 }

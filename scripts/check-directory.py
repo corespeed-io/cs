@@ -15,6 +15,8 @@ EXPECTED = {
     "assets/app-icon.svg",
     "skills/corespeed-memory/SKILL.md",
     "skills/corespeed-memory/agents/openai.yaml",
+    "skills/corespeed-drive/SKILL.md",
+    "skills/corespeed-drive/agents/openai.yaml",
 }
 
 
@@ -30,7 +32,7 @@ require(actual == EXPECTED, f"Directory package file inventory changed: {actual 
 
 manifest = json.loads((PACKAGE / ".codex-plugin/plugin.json").read_text())
 require(manifest["name"] == "corespeed", "Preserve the existing Directory plugin identity")
-require(manifest["skills"] == "./skills/", "Bundle the dedicated memory skill")
+require(manifest["skills"] == "./skills/", "Bundle the dedicated memory and Drive skills")
 require(manifest["mcpServers"] == "./.mcp.json", "Directory requires the root MCP file")
 for field in ("composerIcon", "logo"):
     relative = manifest["interface"][field]
@@ -43,7 +45,7 @@ require(
         "type": "http",
         "url": "https://api.corespeed.io/mcp/plugin/chatgpt",
     }}},
-    "The Directory package must use the memory-only OAuth server without credentials",
+    "The Directory package must use the plugin OAuth server without credentials",
 )
 market = json.loads((ROOT / ".agents/plugins/marketplace.json").read_text())
 sources = {plugin["name"]: plugin["source"]["path"] for plugin in market["plugins"]}
@@ -60,4 +62,4 @@ require(
     "Expected a nonempty prompt string or at most three nonempty prompts",
 )
 require(0 < len(manifest["interface"]["shortDescription"]) <= 30, "Directory subtitle exceeds 30 characters")
-print("Directory package: self-contained memory skill, fixed OAuth endpoint; standalone CLI retained")
+print("Directory package: self-contained memory and Drive skills, fixed OAuth endpoint; standalone CLI retained")
