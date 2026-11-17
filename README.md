@@ -67,7 +67,7 @@ and move files in and out of the organization's Drive (`cs drive put`,
 `cs drive get`). Pick it when Codex cannot load your organization's full tool
 list, or when you want every call to go through the shell. It remains
 available separately from the repository marketplace. It is not part of the
-Directory memory package, and its availability here is not an OpenAI approval.
+Directory package, and its availability here is not an OpenAI approval.
 
 ## Cursor and Grok Bot
 

@@ -42,7 +42,10 @@ passwords, tokens, payment card data, protected health information or
 government identifiers. Store only what the request needs.
 
 This plugin cannot upload a file from the user's computer. If the user asks
-for that, say so; they can paste text content, or give a public https URL.
+for that, say so, and offer the routes this plugin has: paste the text, or
+give a public https URL. Then say once that the standalone CoreSpeed CLI, a
+separate product, can upload local files, and give its official
+documentation at https://corespeed.io/docs/cli. Do not install or run it.
 
 ## Move, share and delete
 

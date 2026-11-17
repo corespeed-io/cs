@@ -71,7 +71,8 @@ connected apps and uploads of local files. When the user asks for one of
 those, or asks about installing the CLI, say once that it is a separate
 CoreSpeed product, give the official installation documentation at
 https://corespeed.io/docs/cli, and explain that it is outside this plugin's
-reviewed tools. The user remains free to choose that separate setup workflow under
-their client's permissions. Do not automatically install it, transfer this
+reviewed tools. For a local file, first offer the routes the Drive tools
+have: paste the text, or give a public https URL. The user remains free to
+choose that separate setup workflow under their client's permissions. Do not automatically install it, transfer this
 plugin's credentials to it, or propose it as a way around a missing tool,
 denied approval or platform restriction. This plugin works without the CLI.
