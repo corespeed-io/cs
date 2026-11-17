@@ -36,12 +36,11 @@ appears under the **CoreSpeed** marketplace once it has been added.
 
 Codex installs the self-contained `plugins/corespeed-directory/` package.
 It uses `https://api.corespeed.io/mcp/plugin/chatgpt`: nine memory
-operations, seven Drive operations, current identity and completion of write
-approvals. Its
+operations, current identity and completion of memory write approvals. Its
 `corespeed-memory` skill guides recall, saving, correction, memory links and
 deletion; the `corespeed-drive` skill guides listing, reading, storing,
 moving, sharing and deleting files in the organization's Drive. New memories
-go to your own space and new files stay private unless you ask to share them. This is the
+and files go to your own space unless you ask to share them. This is the
 package prepared for OpenAI Directory review; it contains no general CLI or
 HTTP API skill, does not operate connected apps and cannot upload local files.
 It requires the plugin endpoint's memory and Drive contract to be deployed

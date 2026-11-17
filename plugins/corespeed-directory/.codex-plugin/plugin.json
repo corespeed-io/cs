@@ -23,7 +23,7 @@
   "interface": {
     "displayName": "CoreSpeed",
     "shortDescription": "Shared memory and files",
-    "longDescription": "Keep facts, decisions, preferences and files in CoreSpeed across sessions and agents. Search or read saved memories, save a fact you ask to remember, correct an identified entry, organize memory links, or delete entries you select. List, read and store files in your organization's Drive, move or rename them, share a file you choose by a link, or delete files you select. New memories go to your own space and new files stay private unless you ask to share them with your organization. See which user and organization are active. Your organization can require a human to approve a write before it runs. The bundled skills guide these workflows. This plugin does not operate connected apps or upload files from your computer, and requires no command-line installation.",
+    "longDescription": "Keep facts, decisions, preferences and files in CoreSpeed across sessions and agents. Search or read saved memories, save a fact you ask to remember, correct an identified entry, organize memory links, or delete entries you select. List, read and store files in your organization's Drive, move or rename them, share a file you choose by a link, or delete files you select. New memories and files go to your own space unless you ask to share them with your organization. See which user and organization are active. Your organization can require a human to approve a write before it runs. The bundled skills guide these workflows. This plugin does not operate connected apps or upload files from your computer, and requires no command-line installation.",
     "developerName": "CoreSpeed",
     "category": "Developer Tools",
     "capabilities": [

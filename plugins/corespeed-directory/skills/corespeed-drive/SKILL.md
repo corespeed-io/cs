@@ -9,20 +9,13 @@ Use the plugin's Drive tools for the user's requested file task. The Drive
 belongs to the user's CoreSpeed organization. Every agent the user connects
 to CoreSpeed reads and writes the same files.
 
-## Paths and access
+## Paths and spaces
 
-The organization has one Drive tree. A path is a plain string like
-`notes/a.md`; do not add a prefix such as `drive://`. Each file has an access
-level, and the user sees only the files they can access:
-
-- 'private': only the user. A new file is private by default.
-- 'org': every member of the organization.
-- 'link': anyone with the file's secret link, without sign-in.
-- 'public': anyone with the file's URL, without sign-in.
-
-Keep a new file private unless the user asks to share it. Files under `tmp/`
-expire after seven days; use a path outside `tmp/` for a file the user wants
-to keep.
+A path without `drive://`, like `notes/a.md`, is in the user's own space.
+`drive://everyone/<path>` is in the space every member of the organization
+shares; `drive://<team slug>/<path>` is in a team space. Use the user's own
+space unless the user names another space. Files under `tmp/` expire after
+seven days; use a path outside `tmp/` for a file the user wants to keep.
 
 ## Find and read
 
@@ -43,10 +36,8 @@ Use `drive__put` for a file the user asks to save:
 - `source` for a copy of another Drive file, or a public https URL the user
   gives.
 
-When the user asks to share a new file with the organization, set `access`
-to 'org' in the same `drive__put`. Putting to an existing path writes a new
-version and keeps the file's access; the earlier version stays readable. Tell
-the user the returned `path`. Do not save credentials,
+Putting to an existing path writes a new version; the earlier version stays
+readable. Tell the user the returned `path`. Do not save credentials,
 passwords, tokens, payment card data, protected health information or
 government identifiers. Store only what the request needs.
 
@@ -55,19 +46,12 @@ for that, say so; they can paste text content, or give a public https URL.
 
 ## Move, share and delete
 
-- Use `drive__move` to rename or move one file the user names. It moves a
-  single file, not a folder. To move a folder, list its files, ask the user
-  to confirm the set, then move each file. If the destination already names
-  a file, the move fails; tell the user and do not delete that file.
-- Use `drive__share` only for the file the user asks to share. If more than
-  one file could match, ask which one first.
-  - "Share with my organization", "my team" or "my colleagues" means 'org'.
-    It keeps the file inside the organization.
-  - Use 'link' or 'public' only when the user asks for people outside the
-    organization to open the file. Both publish the file outside the
-    organization. Give the user the returned `share_url`.
-  - 'private' or 'org' withdraws every outside link.
-  Say which access level you set.
+- Use `drive__move` to rename or move a file or folder the user names. A
+  folder path ends in `/`.
+- Use `drive__share` only for the file the user asks to share. 'link' gives
+  anyone with the secret link access without sign-in; 'public' gives anyone
+  with the URL access. Say which one you set, and give the `share_url`. If
+  more than one file could match, ask which one first.
 - Use `drive__delete` only for a file the user has named or clearly selected.
   Deletion removes every version and cannot be undone. For several files or a
   folder, first list the matching files and ask the user to confirm the exact
